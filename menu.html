@@ -1,0 +1,2037 @@
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'/>
+
+</head>
+<body> 
+    <div class="cards">
+        <div class="card" id="card1">
+             <div>
+                <i class="fa fa-user fa-3x icon"></i> 
+                  
+             </div>
+             <div class="labels">
+             <div class="titulo">
+                 <label style="width:100%; align-self: flex-end;">Razón Social</label>  
+             </div>
+             <div class="label">
+                 <strong >PRUEBA|SISTEMAS|SIS</strong>
+             </div>
+             </div>
+        </div>      
+        <div class="card" id="card2">
+            <div>
+                <i class="fa fa-money fa-3x icon"></i> 
+            </div>
+            <div class="labels">
+            <div class="titulo">
+                <label style="width:100%; align-self: flex-end;">Saldo</label>  
+            </div>
+            <div class="label">
+                <strong>$0.00</strong>
+            </div>
+            </div>
+        </div>   
+        <div class="card" id="card3">
+            <div>
+                <i class="fa fa-credit-card fa-3x icon"></i> 
+            </div>
+            <div class="labels">
+            <div class="titulo">
+                <label style="width:100%; align-self: flex-end;">Tarjetas</label>  
+            </div>
+            <div class="label">
+                <strong >1</strong>
+            </div>
+            </div>
+        </div>   
+        <div class="card" id="card4">
+            <div>
+                <i class="fa fa-file-o fa-3x icon"></i> 
+            </div>
+            <div class="labels">
+            <div class="titulo">
+                <label style="width:100%; align-self: flex-end;">Trans. del dia / Monto</label>  
+            </div>
+            <div class="label">
+                <strong>0 /$0.00</strong>
+            </div>
+            </div>
+        </div>   
+    </div>
+
+    
+
+    <br></br>
+    <br></br>
+
+    <div class="filtros">
+       &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+    </div>
+    <br>
+    <div class="row">
+        <div class="form-group ">
+            <label>Tarjeta</label>
+            
+                <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+                <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                    <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+            </select>
+        </div>
+
+
+        <div class="form-group ">
+            <label>Centro de costos</label>
+            <select id="Centrocosto" class="select" data-live-search="true" data-width="100%">
+                <option data-icon="fa fa-university" value="0">Seleccione centro costo...</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Placa</label>
+            <select id="placas" class="select" data-live-search="true" data-width="100%">
+                <option data-icon="fa fa-car" value="0">Seleccione placa...</option>
+                    <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>No economico</label>
+            <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+                <option data-icon="fa fa-car" value="0">Seleccione no economico</option>
+                    <option data-icon="fa fa-car" value='1220'></option>
+            </select>
+        </div>
+
+        
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <label>Activo/Desactivado</label>
+            <select id="Status" class="select" data-live-search="true" data-width="100%">
+                <option data-icon="fas fa-th-list" value="">Seleccione status</option>
+                <option data-icon="far fa-circle" value="A">Activo</option>
+                <option data-icon="fas fa-circle" value="B">Desactivado</option>
+            
+            </select>
+        </div>
+    </div>
+    <br>
+
+    <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+    
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="6">Listado de tarjetas</td>
+    </tr>
+    <tr> 
+        <td colspan="6">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Cuenta</th>
+        <th class="table_column_header">Marca</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Modelo</th>
+        <th class="table_column_header">Placas</th>
+        <th class="table_column_header">Centro de costo</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="6">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="6" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="9">Listado de tarjetas</td>
+    </tr>
+    <tr> 
+        <td colspan="9">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header"></th>
+        <th class="table_column_header">Estado</th>
+        <th class="table_column_header">Cuenta</th>
+        <th class="table_column_header">Marca</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Modelo</th> 
+        <th class="table_column_header">Placas</th> 
+        <th class="table_column_header">Centro de costo</th> 
+        <th class="table_column_header">Odometro</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="9">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="9" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+    <br></br>
+
+    <div class="filtros">
+       &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+    </div>
+    <br>
+<div class="row">
+    <div class="form-group ">
+        <label>Activo / Desactivado</label>
+        
+            <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-credit-card" value="0">Seleccione status...</option>
+                <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+        </select>
+    </div>
+
+ 
+    
+</div>
+
+    <br> 
+    <button class="bttn bttn-success"><i class="fa fa-male"></i> Crear</button>
+    <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+    <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+    <br>    
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="5">Listado de choferes</td>
+    </tr>
+    <tr> 
+        <td colspan="5">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header"></th>
+        <th class="table_column_header">Estado</th>
+        <th class="table_column_header">Nombre</th>
+        <th class="table_column_header">Correo electronico</th>
+        <th class="table_column_header">GPS</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="5">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="5" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+<div class="row">
+ <div class="form-group ">
+     <label>Fecha inicio</label> 
+         <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+ </div>
+
+ <div class="form-group ">
+    <label>Fecha fin</label> 
+        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+</div>
+ 
+<div class="form-group "> 
+    <br>
+    <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+
+ 
+</div>
+ 
+ <br>    
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="7">Facturas</td>
+    </tr>
+    <tr> 
+        <td colspan="7">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Folio</th>
+        <th class="table_column_header">Fecha emisión</th>
+        <th class="table_column_header">Periodo inicial</th>
+        <th class="table_column_header">Periodo final</th>
+        <th class="table_column_header">Fecha limite</th>
+        <th class="table_column_header">Descargar PDF</th> 
+        <th class="table_column_header">Descargar XML</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="7">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="7" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+<div class="row">
+ <div class="form-group ">
+     <label>Activo / Desactivado</label>
+     
+         <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+         <option data-icon="fa fa-credit-card" value="0">Seleccione status...</option>
+             <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+     </select>
+ </div>
+ 
+</div>
+
+ <br> 
+ <button class="bttn bttn-success"><i class="fa fa-male"></i> Crear</button>
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ <br>    
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="12">Listado de vehiculos</td>
+    </tr>
+    <tr> 
+        <td colspan="12">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header"></th>
+        <th class="table_column_header">Estado</th>
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Controla odometro</th> 
+        <th class="table_column_header">Placas</th> 
+        <th class="table_column_header">Identificador</th> 
+        <th class="table_column_header">Marca</th> 
+        <th class="table_column_header">Modelo</th> 
+        <th class="table_column_header">Ultimo odometro</th> 
+        <th class="table_column_header">Centro de costos</th> 
+        <th class="table_column_header">GPS</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="12">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="12" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+<div class="row">
+ <div class="form-group ">
+     <label>Activo / Desactivado</label>
+     
+         <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+         <option data-icon="fa fa-credit-card" value="0">Seleccione status...</option>
+             <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+     </select>
+ </div>
+ 
+</div>
+
+<br> 
+<button class="bttn bttn-success"><i class="fa fa-male"></i> Crear</button>
+<button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button> 
+<br>   
+<br>   
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="6">Listado de usuarios</td>
+    </tr>
+    <tr> 
+        <td colspan="6">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header"></th>
+        <th class="table_column_header">Estado</th>
+        <th class="table_column_header">Nombre</th>
+        <th class="table_column_header">Usuario</th>
+        <th class="table_column_header">Correo electrónico</th> 
+        <th class="table_column_header"></th>  
+    </tr>
+
+    <tr> 
+        <td colspan="6">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="6" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="5">Listado de usuarios</td>
+    </tr>
+    <tr> 
+        <td colspan="5">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header"></th>
+        <th class="table_column_header">Estado</th>
+        <th class="table_column_header">Nombre</th>
+        <th class="table_column_header">Usuario</th>
+        <th class="table_column_header">Correo electrónico</th>  
+    </tr>
+
+    <tr> 
+        <td colspan="5">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="5" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <label>Centro de costos</label>
+        <select id="Centrocosto" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-university" value="0">Seleccione centro costo...</option>
+        </select>
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Tipo reporte</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione tipo reporte</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="9">Transacciones</td>
+    </tr>
+    <tr> 
+        <td colspan="9">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Fecha</th>
+        <th class="table_column_header">Transacción</th>
+        <th class="table_column_header">Estación</th>
+        <th class="table_column_header">Chofer</th>
+        <th class="table_column_header">Tarjeta</th> 
+        <th class="table_column_header">Placas</th> 
+        <th class="table_column_header">Litros</th> 
+        <th class="table_column_header">Producto</th> 
+        <th class="table_column_header">Monto</th>
+    </tr>
+
+    <tr> 
+        <td colspan="9">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="9" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+<div class="row">
+ <div class="form-group ">
+     <label>Fecha inicio</label> 
+         <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+ </div>
+
+ <div class="form-group ">
+    <label>Fecha fin</label> 
+        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+</div>
+ 
+<div class="form-group "> 
+    <br>
+    <div>
+    <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>  
+    <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>  
+    </div>
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+<div class="form-group ">  
+</div>
+
+ 
+</div>
+<br>
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Abonos</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Concepto</th>
+        <th class="table_column_header">Importe</th>
+        <th class="table_column_header">Fecha</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="7">Rechazos</td>
+    </tr>
+    <tr> 
+        <td colspan="7">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Descripción</th>
+        <th class="table_column_header">Cuenta</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Chofer</th>
+        <th class="table_column_header">Estación</th> 
+        <th class="table_column_header">Producto</th> 
+        <th class="table_column_header">Fecha</th>
+    </tr>
+
+    <tr> 
+        <td colspan="7">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="7" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Usuarios</label>
+         
+             <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+    </div>
+
+     <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+
+     
+ </div>
+ <br> 
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ <br>
+ <br>
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Bitácoras</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Usuario</th>
+        <th class="table_column_header">Descripción</th>
+        <th class="table_column_header">Fecha</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Usuarios</label>
+         
+             <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Placa</label>
+         
+             <select id="placa" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione placa...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+    </div>
+
+     <div class="form-group">
+        <label>No economico</label>
+         
+             <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione No. economico...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+
+     
+ </div>
+<div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ <br>
+ <br>
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="10">Acumulados</td>
+    </tr>
+    <tr> 
+        <td colspan="10">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Marca</th>
+        <th class="table_column_header">Placas</th>
+        <th class="table_column_header">Periodo</th> 
+        <th class="table_column_header">Permitido</th> 
+        <th class="table_column_header">Última transacción</th> 
+        <th class="table_column_header">Fecha transacción</th> 
+        <th class="table_column_header">Saldo</th> 
+        <th class="table_column_header">Prox ajuste</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="10">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="10" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="2">Saldos</td>
+    </tr>
+    <tr> 
+        <td colspan="2">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Cuenta</th>
+        <th class="table_column_header">Saldo</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="2">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="2" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Usuarios</label>
+         
+             <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Placa</label>
+         
+             <select id="placa" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione placa...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+    </div>
+
+     <div class="form-group">
+        <label>No economico</label>
+         
+             <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione No. economico...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+
+     
+ </div>
+<div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ <br>
+ <br>
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="9">Historico acumulados</td>
+    </tr>
+    <tr> 
+        <td colspan="9">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Fecha</th>
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">Consumido</th>
+        <th class="table_column_header">Periodo anterior</th>
+        <th class="table_column_header">Transacción anterior</th> 
+        <th class="table_column_header">Monto periodo</th> 
+        <th class="table_column_header">Periodo actua</th> 
+        <th class="table_column_header">Monto transacción</th> 
+        <th class="table_column_header">Monto periodo actual</th>
+    </tr>
+
+    <tr> 
+        <td colspan="9">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="9" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>  
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ <br>
+ <br>
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="6">Documentos emitidos</td>
+    </tr>
+    <tr> 
+        <td colspan="6">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Cliente</th>
+        <th class="table_column_header">Emisión</th>
+        <th class="table_column_header">Vencimiento</th>
+        <th class="table_column_header">Días vencidos</th>
+        <th class="table_column_header">Monto</th> 
+        <th class="table_column_header">Deuda</th>
+    </tr>
+
+    <tr> 
+        <td colspan="6">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="6" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="12">Rendimiento</td>
+    </tr>
+    <tr> 
+        <td colspan="12">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Placas</th>
+        <th class="table_column_header">Fecha</th>
+        <th class="table_column_header">Transacción</th> 
+        <th class="table_column_header">Estación</th> 
+        <th class="table_column_header">Chofer</th> 
+        <th class="table_column_header">Litros</th> 
+        <th class="table_column_header">Combustible</th> 
+        <th class="table_column_header">Odometro</th> 
+        <th class="table_column_header">Km recorridos</th> 
+        <th class="table_column_header">Rendimiento</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="12">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="12" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <label>Centro de costos</label>
+        <select id="costos" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione centro de costos...</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="12">Transacciones</td>
+    </tr>
+    <tr> 
+        <td colspan="12">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Placas</th>
+        <th class="table_column_header">Chofer</th>
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">Litros</th> 
+        <th class="table_column_header">Producto</th> 
+        <th class="table_column_header">Monto</th> 
+        <th class="table_column_header">Estación</th> 
+        <th class="table_column_header">Ubicación</th> 
+        <th class="table_column_header">Fecha</th> 
+        <th class="table_column_header">Transacción</th> 
+        <th class="table_column_header">Recorrido</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="12">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="12" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Consumos de IVA</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Subtotal</th>
+        <th class="table_column_header">IVA</th>
+        <th class="table_column_header">Total</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Totales</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Litros</th>
+        <th class="table_column_header">Litros</th>
+        <th class="table_column_header">Totales</th>
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="4">Productos</td>
+    </tr>
+    <tr> 
+        <td colspan="4">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Clave</th>
+        <th class="table_column_header">Producto</th>
+        <th class="table_column_header">Monto</th>
+        <th class="table_column_header">Litros</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="4">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="4" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>  
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="5">Top 10 consumos</td>
+    </tr>
+    <tr> 
+        <td colspan="5">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">Monto</th>
+        <th class="table_column_header">Litros</th>
+        <th class="table_column_header">Placas</th>
+        <th class="table_column_header">No economico</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="5">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="5" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Totales</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Total</th>
+        <th class="table_column_header">Monto</th>
+        <th class="table_column_header">Litros</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="5">Rendimiento graficas</td>
+    </tr>
+    <tr> 
+        <td colspan="5">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Autorización</th>
+        <th class="table_column_header">Odometro</th>
+        <th class="table_column_header">Km recorridos</th>
+        <th class="table_column_header">Litros</th>
+        <th class="table_column_header">Rendimiento</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="5">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="5" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="5">Rendimientos graficas</td>
+    </tr>
+    <tr> 
+        <td colspan="5">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Autorización</th>
+        <th class="table_column_header">Odometro</th>
+        <th class="table_column_header">Km recorridos</th>
+        <th class="table_column_header">Litros</th>
+        <th class="table_column_header">Rendimiento</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="5">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="5" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group ">
+         <label>Tarjeta</label>
+         
+             <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+                 <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+         </select>
+     </div>
+
+     <div class="form-group">
+        <label>Estacion</label>
+        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+                <option data-icon="fa fa-car" value='1220'></option>
+        </select>
+    </div>
+
+     <div class="form-group">
+         <label>Chofer</label>
+         <select id="chofer" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+                 <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+         </select>
+     </div>
+
+     
+
+     
+     <div class="form-group ">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+    </div>
+
+     
+ </div>
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Placa</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>
+ <div class="row">
+    <div class="form-group ">
+        <label>Fecha inicio</label> 
+            <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+    </div>
+   
+    <div class="form-group ">
+       <label>Fecha fin</label> 
+           <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">     
+   </div>
+    
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div>
+   <div class="form-group ">  
+    <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+   </div> 
+   
+    
+   </div>
+ <br>
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Rechazos</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Cantidad</th>
+        <th class="table_column_header">No rechazos</th>
+        <th class="table_column_header">Descripción</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<div class="filtros">
+    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp;  <b><label>Filtros</label></b>
+ </div> 
+ <br>
+ <div class="row">
+     <div class="form-group">
+         <label>Mes</label>
+         <select id="Status" class="select" data-live-search="true" data-width="100%">
+             <option data-icon="fas fa-th-list" value="">Seleccione mes...</option>
+             <option data-icon="far fa-circle" value="A">Activo</option>
+             <option data-icon="fas fa-circle" value="B">Desactivado</option>
+         
+         </select>
+     </div>
+     <div class="form-group">
+        <label>No economico</label>
+        <select id="Status" class="select" data-live-search="true" data-width="100%">
+            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+            <option data-icon="far fa-circle" value="A">Activo</option>
+            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+        
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+
+    </div>
+    <div class="form-group" hidden>
+        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" /> 
+        
+      
+    </div>
+ </div>
+ <br>  
+
+ <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+ <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+ 
+<table class="table">
+    <tr class="table_header">
+        <td align="center" colspan="3">Promedio consumo mensual</td>
+    </tr>
+    <tr> 
+        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+    </tr>
+    <tr  class="fila"> 
+        <th class="table_column_header">Tarjeta</th>
+        <th class="table_column_header">No economico</th>
+        <th class="table_column_header">Promedio</th> 
+    </tr>
+
+    <tr> 
+        <td colspan="3">Visualizando 1 de 1 registros</td> 
+        
+    </tr>   
+    <tr> 
+        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+    </tr>   
+    <tr class="fila_inferior">
+    </tr>
+</table>
+
+
+</body>
+</html>

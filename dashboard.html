@@ -1,0 +1,4782 @@
+<!DOCTYPE html>
+
+
+
+<script>
+
+    /*  TO CHECK SESSION ON DASHBOARD  */
+
+    const sesionlog = sessionStorage.getItem("sesionlog");
+
+    if(sesionlog == null){
+
+        window.location = "./login.html";
+
+    }
+
+</script>
+
+
+
+<html>
+
+
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"></link>
+
+    <link rel="stylesheet" href="./styles.css"></link>
+
+    <title>Monedero</title>
+
+    <script src="scripts/scripts.js"></script>
+
+    <script src="scripts/clientesScripts.js"></script>
+
+   
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.js"></script>
+
+    <link rel="icon" href="imagen/favicon2.png" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+
+
+
+ </head>
+
+
+
+<body>
+
+    <style>
+
+        .modulehidden{
+
+            display: none;
+
+        }
+
+        /* 
+
+        .modulehidden :nth-child(1){
+
+            visibility: visible;
+
+        } */
+
+
+
+        body{
+
+            display: flex;
+
+            flex-direction: column;
+
+            height: 100vh;
+
+            margin: 0; 
+
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
+            font-size: 14px;
+
+            color: #337ab7;
+
+        }
+
+
+
+        #navbar{
+
+            display: flex;
+
+            min-height: 8vh;
+
+            background-color: #f8f8f8;
+
+            box-sizing: border-box;
+
+            border: 1px solid #e7e7e7;
+
+            gap: 2vw;
+
+            padding: 0 1vw;
+
+        }
+
+
+
+        #navbar-title, #navbar-fecha{
+
+            color: #777;
+
+            font-size: 18px;
+
+        }
+
+
+
+        #logout:hover, #notifications:hover{
+
+            background-color: #eee;
+
+            color: #23527c;
+
+        }
+
+
+
+        #navbar span{
+
+            align-self: center;
+
+        }
+
+
+
+        #logout{
+
+            display: flex;
+
+            height: 100%;
+
+            cursor: pointer;
+
+            align-self: flex-end;
+
+            margin-left: auto;
+
+            padding: 0 1vw;
+
+        }
+
+
+
+        #notifications{
+
+            display: flex;
+
+            height: 100%;
+
+            cursor: pointer;
+
+            align-self: flex-end;
+
+            padding: 0 1vw;
+
+        }
+
+
+
+        #content{
+
+            display: flex;
+
+        }
+
+
+
+        #sidemenu{
+
+            height: 100%;
+
+            width: 18vw;
+
+            background-color: #f8f8f8;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        .sideiconleft{
+
+            float: right;
+
+        }
+
+
+
+        #module{
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 2vw;
+
+        }
+
+
+
+        .sidebtn{
+
+            min-height: 6vh;
+
+            box-sizing: border-box;
+
+            border: 1px solid #e7e7e7;
+
+            cursor: pointer;
+
+            padding: 10px;
+
+        }
+
+        
+
+        .sidebtn:hover{
+
+            background-color: #eee;
+
+            color: #23527c;
+
+        }
+
+
+
+        .sidedrop{
+
+            max-height: 0px;
+
+            overflow: hidden;
+
+            transition: max-height .4s;
+
+            transition-timing-function: linear;
+
+        }
+
+
+
+        .sidedrop-drop{
+
+            background-color: white;
+
+            padding: 1vh;
+
+            padding-left: 3vw;
+
+            cursor: pointer;
+
+        }
+
+
+
+        .sidedrop-drop:hover{
+
+            background-color: #eee;
+
+        }
+
+    </style>
+
+
+
+    <div id="navbar">
+
+        <span id="navbar-title">Monedero Petromar v0.0.1</span>
+
+        <span id="navbar-fecha">32 de febrero de 2077</span>
+
+        <div id="logout" >
+
+            <span>
+
+                <label>Bienvenido(a) &nbsp</label> <label  id="notificationNom" >Usuario</label>
+
+                 
+
+             </span>
+
+        </div>
+
+
+
+        <div id="notifications">
+
+            <div id="logout" onclick="logOutVe()">
+
+            <span>
+
+                <i class="fa fa-power-off"></i>
+
+                <span>Cerrar Sesión</span>
+
+            </span>
+
+        </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="content">
+
+        <div id="sidemenu">
+
+            <div class="sidebtn" >
+
+                <i class="fa fa-home fa-fw"></i>
+
+                <span>Inicio</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+                
+
+            </div>
+
+
+
+            <div class="sidebtn" >
+
+                <i class="fa fa-th fa-fw"></i>
+
+                <span>Administración</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+                <div class="sidedrop-drop" onclick="moduleChange('administracion-tarjetas')">
+
+                    <span>Tarjetas</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('administracion-choferes')">
+
+                    <span>Choferes</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('administracion-descfacts')">
+
+                    <span>Descarga de facturas</span>
+
+                </div>
+                <div class="sidedrop-drop" onclick="moduleChange('administracion-descComp')" id="mostrarComp">
+
+                    <span>Descarga de Complementos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('administracion-vehiculos')">
+
+                    <span>Vehículos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('seguridad-usuarios')">
+
+                    <span>Usuarios web</span>
+
+                </div>
+
+            </div>
+
+            
+
+           
+
+
+
+            <div class="sidebtn">
+
+                <i class="fa fa-file-invoice fa-fw"></i> 
+
+                <span>Reportes</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-transacciones')">
+
+                    <span>Servicios</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-abonos')">
+
+                    <span>Abonos</span>
+
+                </div>
+
+                <!--<div class="sidedrop-drop" onclick="moduleChange('reportes-rechazos')">
+
+                    <span>Rechazos</span>
+
+                </div>-->
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-bitacoras')">
+
+                    <span>Bitácora</span>
+
+                </div>
+
+                <!--<div class="sidedrop-drop" onclick="moduleChange('reportes-acumulados')">
+
+                    <span>Acumulados</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-saldos')">
+
+                    <span>Saldos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-historico')">
+
+                    <span>Historico</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-docsemitidos')">
+
+                    <span>Documentos Emitidos</span>
+
+                </div>-->
+
+                <div class="sidedrop-drop" onclick="moduleChange('reportes-rendimiento')">
+
+                    <span>Rendimiento</span>
+
+                </div>
+
+                <!--<div class="sidedrop-drop" onclick="moduleChange('reportes-recorridoscargas')">
+
+                    <span>Recorridos vs Cargas</span>
+
+                </div>-->
+
+            </div>
+            <div class="sidebtn">
+
+                <i class="fa-solid fa-map-location-dot"></i> 
+
+                <span>Ubicaciones</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+                
+
+                <div class="sidedrop-drop" onclick="moduleChange('seguridad-permisos')">
+
+                    <span>Mapa</span>
+ 
+
+                </div>
+
+            </div>
+
+
+
+            <!--<div class="sidebtn">
+
+                <i class="fa fa-chart-line fa-fw"></i> 
+
+                <span>Gráficas</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+                <div class="sidedrop-drop" onclick="moduleChange('graficas-consumos')">
+
+                    <span>Consumos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('graficas-top')">
+
+                    <span>Top 10 consumos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('graficas-rendimiento')">
+
+                    <span>Rendimiento</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('graficas-rechazos')">
+
+                    <span>Rechazos</span>
+
+                </div>
+
+                <div class="sidedrop-drop" onclick="moduleChange('graficas-promedio')">
+
+                    <span>Promedio</span>
+
+                </div>
+
+            </div>-->
+
+
+
+            <!--<div class="sidebtn">
+
+                <i class="fa fa-ticket-alt fa-fw"></i> 
+
+                <span>Vales</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+            </div>-->
+
+
+
+            <div class="sidebtn" onclick="logOutVe()">
+
+                <i class="fa fa-power-off fa-fw"></i> 
+
+                <span>Cerrar Sesión</span>
+
+                <span class="fa fa-angle-left sideiconleft"></span>
+
+            </div>
+
+            <div class="sidedrop">
+
+            </div>
+
+        </div>
+
+
+
+        <div id="module">
+
+            <div class="cards">
+
+                <div class="card" id="card1">
+
+                    <div>
+
+                        <i class="fa fa-user fa-3x icon"></i> 
+
+                    </div>
+
+                    <div class="labels">
+
+                    <div class="titulo">
+
+                        <label style="width:100%; align-self: flex-end;">Razón Social</label>  
+
+                    </div>
+
+                    <div class="label">
+
+                        <strong id="cards-usuario"></strong>
+
+                    </div>
+
+                    </div>
+
+                </div>      
+
+                <div class="card" id="card2">
+
+                    <div>
+
+                        <i class="fa fa-money-bill fa-3x icon"></i> 
+
+                    </div>
+
+                    <div class="labels">
+
+                    <div class="titulo">
+
+                        <label style="width:100%; align-self: flex-end;" id="label-saldo">Saldo</label>  
+
+                    </div>
+
+                    <div class="label">
+
+                        <strong id="cards-saldo">$0.00</strong>
+
+                    </div>
+
+                    </div>
+
+                </div>   
+
+                <div class="card" id="card3">
+
+                    <div>
+
+                        <i class="fa fa-credit-card fa-3x icon"></i> 
+
+                    </div>
+
+                    <div class="labels">
+
+                    <div class="titulo">
+
+                        <label style="width:100%; align-self: flex-end;">Tarjetas</label>  
+
+                    </div>
+
+                    <div class="label">
+
+                        <strong id="cards-tarjetas">0</strong>
+
+                    </div>
+
+                    </div>
+
+                </div>   
+
+                <div class="card" id="card4">
+
+                    <div>
+
+                        <i class="fa fa-file fa-3x icon"></i> 
+
+                    </div>
+
+                    <div class="labels">
+
+                    <div class="titulo">
+
+                        <label style="width:100%; align-self: flex-end;">Trans. del dia / Monto</label>  
+
+                    </div>
+
+                    <div class="label">
+
+                        <strong id="cards-movshoy">0 /$0.00</strong>
+
+                    </div>
+
+                    </div>
+
+                </div>   
+
+            </div>
+
+
+
+            <div id="administracion-vehiculos" class="modulehidden">
+
+                <h1>Vehículos</h1>
+
+                <div class="cform-selectWtext" style="width: 335px;;">
+
+                    <b>Seleccione un vehículo:</b>
+
+                    <select title="Seleccione vehiculo" style="width: 187px;" class="cform-select sf-vehi" id="altavehicle-idcte" onchange="fillForm_Vehi()"> 
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="formcontainer-2">
+
+                    <div class="formcontainer-3">
+
+                        <div class="cform-inputWtext">
+
+                            <b>Modelo:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-model" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Año:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-year" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Placas:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-placas">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>No. económico:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-noecono">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Tipo de vehiculo:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-tipovehi" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="formcontainer-3">
+
+                        <div class="cform-inputWtext">
+
+                            <b>Controla odometro:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-contodo" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>KM min por carga:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="number" class="cform-input" id="altavehicle-mincarga" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Variación:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-var" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Odometro inicial:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-odoini" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                        <div class="cform-inputWtext">
+
+                            <b>Rend. promedio:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altavehicle-rendprom" disabled>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cform-selectWtext">
+
+                            <b>Centro costos/Dpto:</b>
+
+                            <input class="cform-input" id="altavehicle-dpto" disabled></input>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="formcontainer-2">
+
+                    <div class="cform-selectWtext">
+
+                        <b>Tipo:</b>
+
+                        <input type="text" class="cform-input" id="altavehicle-tipo" disabled></input>
+
+                    </div>
+
+    
+
+                    <div class="cform-selectWtext">
+
+                        <b>Tarjeta:</b>
+
+                        <input class="cform-input" id="altavehicle-tarjeta" maxlength="16" disabled></input>
+
+                    </div>
+
+                </div>
+
+
+
+                <button class="btnfiltrar" onclick="mod_Vehiculo()">Actualizar</button>
+
+                <button class="btn bttn-success" onclick="downloadPDFWithjsPDF_vehi()"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button>
+
+
+
+                <div id="tblvehi">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF4" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camarón Sábalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                            Mazatlán, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                </div>
+
+                </div>
+
+                <div class="divtbl-1">
+
+                    <div class="divtbl-1-header">
+
+                        Listado de vehículos
+
+                    </div>
+
+
+
+                    <table id="tbl-vehiculos">
+
+                        <tr>
+
+                            <th>Activo/Inactivo</th>
+
+                            <th>Tarjeta</th>
+
+                            <th>Modelo</th>
+
+                            <th>Año</th>
+
+                            <th>Placas</th>
+
+                            <th>Centro costo/depto</th>
+
+                            <th>Controla odometro</th>
+
+                            <th>Fecha asignacion</th>
+
+                        </tr>
+
+                        
+
+                        <tr></tr>
+
+                    </table>
+
+                    
+
+                </div>
+
+            </div>
+
+                <br>
+
+                    <!--<span>
+
+                        <button class="btnfiltrar" onclick="ActivarDesactivarVehi()" >Guardar</button>
+
+                    </span>-->
+
+            </div>
+
+            
+
+            <!--
+
+            <div id="administracion-tarjetas" class="modulehidden">
+
+                <h1>Tarjetas</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Tarjeta</label>
+
+            
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+            
+
+            
+
+                    <div class="form-group ">
+
+                        <label>Centro de costos</label>
+
+                        <select id="Centrocosto" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-university" value="0">Seleccione centro costo...</option>
+
+                        </select>
+
+                    </div>
+
+            
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                        <select id="placas" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione placa...</option>
+
+                            <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+
+                        </select>
+
+                    </div>
+
+            
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                        <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione no economico</option>
+
+                            <option data-icon="fa fa-car" value='1220'></option>
+
+                        </select>
+
+                    </div>
+
+            
+
+            
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label>Activo/Desactivado</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione status</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+            
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+            
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+            
+
+            
+
+                <br></br>
+
+                <br></br>
+
+                <br></br>
+
+                <br></br>
+
+            
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="6">Listado de tarjetas</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="6">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Cuenta</th>
+
+                        <th class="table_column_header">Marca</th>
+
+                        <th class="table_column_header">No economico</th>
+
+                        <th class="table_column_header">Modelo</th>
+
+                        <th class="table_column_header">Placas</th>
+
+                        <th class="table_column_header">Centro de costo</th>
+
+                    </tr>
+
+            
+
+                    <tr>
+
+                        <td colspan="6">Visualizando 1 de 1 registros</td>
+
+            
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="6" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>-->
+
+
+
+            <div id="administracion-choferes" class="modulehidden">
+
+                <h1>Choferes</h1>
+
+                <br>
+
+                <button class="bttn bttn-success" onclick="downloadPDFWithjsPDF_chofer()"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button>
+
+                
+
+                <div id="tblchofer">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF3" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camarón Sábalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                            Mazatlán, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                </div>
+
+                </div>
+
+                
+
+                <div class="divtbl-1" id="t-chofer">
+
+                    <div class="divtbl-1-header">
+
+                        Listado de choferes
+
+                    </div>
+
+
+
+                    <table id="tbl-choferes">
+
+                        <tr>
+
+                            <th>Activar/Descactivar</th>
+
+                            <th>Número</th>
+
+                            <th>Nombre</th>
+
+                            
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+                <br>
+
+                <!--<span>
+
+                    <button class="btnfiltrar" onclick="ActivarDesactivarChofer()" >Guardar</button>
+
+                </span>-->
+
+            </div>
+
+
+
+            <div id="administracion-descfacts" class="modulehidden">
+
+                <h1>Descarga de facturas</h1>
+
+               <!-- <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Activo / Desactivado</label>
+
+                
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione status...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                </div>-->
+
+                
+
+                <br>
+
+                <span><input type="date" class="inputfecha" id="fechainiFac"></span>
+
+                    <span><input type="date" class="inputfecha" id="fechafinFac" ></span>
+
+                    <span><button class="bttn bttn-success" onclick="filtrarFacturas()">Buscar</button></span>
+
+                <br>
+
+                <div class="divtbl-1" id="t-chofer">
+
+                    <div class="divtbl-1-header">
+
+                        Listado de Facturas
+
+                    </div>
+
+
+                    <table id="tbl-facturas">
+
+                        <tr>
+
+                        <th class="table_column_header">Folio</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Importe</th>
+
+                        <th class="table_column_header">Cantidad</th>
+
+                        <th class="table_column_header">Factura</th>
+
+                        <th class="table_column_header">PDF</th>
+
+                        </tr>
+
+                    </table>
+
+
+                    <table id="tbl-facturasC">
+
+                        <tr>
+
+                        <th class="table_column_header">Folio</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Fecha Vencimiento</th>
+
+                        <th class="table_column_header">Días vencidos</th>
+
+                        <th class="table_column_header">Importe</th>
+
+                        <th class="table_column_header">Cantidad</th>
+
+                        <th class="table_column_header">Factura</th>
+
+                        <th class="table_column_header">PDF</th>
+
+                        </tr>
+
+                    </table>
+
+                    
+
+                </div>
+
+                
+
+            </div>
+
+
+            <div id="administracion-descComp" class="modulehidden">
+
+                <h1>Descarga de Complementos</h1>
+
+              
+
+                <br>
+
+                <span><input type="date" class="inputfecha" id="fechainiCom"></span>
+
+                    <span><input type="date" class="inputfecha" id="fechafinCom" ></span>
+
+                    <span><button class="bttn bttn-success" onclick="filtrarComplementos()">Buscar</button></span>
+
+                <br>
+
+                <div class="divtbl-1" id="t-Complementos">
+
+                    <div class="divtbl-1-header">
+
+                        Listado de Complementos
+
+                    </div>
+
+
+                    <table id="tbl-Complementos">
+
+                        <tr>
+
+                        <th class="table_column_header">Folio</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Importe</th>
+
+                        <th class="table_column_header">Complemento</th>
+
+                        <th class="table_column_header">PDF</th>
+
+                        </tr>
+
+                    </table>
+
+
+                </div>
+
+                
+
+            </div>
+
+            
+
+            
+
+
+            <div id="administracion-tarjetas" class="modulehidden">
+
+                <h1>Tarjetas</h1>
+
+                <!-- <div class="cform-select">
+
+                    <span>
+
+                        <span>Seleccione un cliente</span>
+
+                        <span><i class="fas fa-caret-down"></i></span>
+
+                    </span>
+
+                </div> -->
+
+                <!-- <div class="cform-inputWtext">
+
+                    <b>placas:</b>
+
+                    <div>
+
+                        <span>
+
+                            <input type="text" class="cform-input" id="altatarjetas-placas">
+
+                        </span>
+
+                    </div>
+
+                </div> -->
+
+
+
+                <div class="formcontainer-2">
+
+                    <div class="formcontainer-3" style="margin-right: 15px">
+
+                        <div class="cform-inputWtext">
+
+                            <b>No. tarjeta:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <select onchange="fillSelects_Placas()"type="text" class="cform-select sltarjetas" id="altatarjetas-notarjeta">
+
+                                        <option value="">Seleccione...</option>
+
+                                    </select>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+        
+
+                       <!-- <div class="cform-selectWtext">
+
+                            <b>ID cliente:</b>
+
+                            <select class="cform-select sf-cte" id="altatarjetas-idcte">
+
+
+
+                            </select>
+
+                        </div>-->
+
+        
+
+                        <div class="cform-selectWtext">
+
+                            <b>Placas:</b>
+
+                            <input type="text" class="cform-input sltarjetas-placas" id="altatarjetas-placas">
+
+                                
+
+                        </div>
+
+
+
+                        <div class="cform-selectWtext">
+
+                           
+
+                        </div>
+
+
+
+                        
+
+                    </div>
+
+
+
+                    <div class="formcontainer-3">
+
+                        <p><b>Estaciones autorizadas</b></p>
+
+                        <div class="formcontainer-3" style="width: 300px; margin-left: 0px;">
+
+                            <div class="formcontainer-2">
+
+                        <input type="checkbox" id="estchecks-all2" onchange="checktodas2()">
+
+                        <label for="estchecks-all2"><b>Seleccionar todas</b></label>
+
+                        </div>
+
+                        <div id="estaciones-checks2" style="width: 280px;">
+
+                            
+
+                        </div>
+
+                        </div>
+
+        
+
+                        <p><b>Combustibles autorizados</b></p>
+                        <div class="formcontainer-2">
+                            <input type="checkbox" name="" id="checkcombus" onchange="seleccCom()">
+                            <label for="checkcombus">Seleccionar todos</label>
+                        </div>
+                        <div id="combustibles-checks22" style="width: 280px;">
+                            
+                        </div>
+                        
+
+        
+
+                        <p><b>Horarios</b></p>
+
+                        <div class="formcontainer-2">
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-1">
+
+                            <label for="daycheck-1">Lunes</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-2">
+
+                            <label for="daycheck-2">Martes</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-3">
+
+                            <label for="daycheck-3">Miercoles</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-4">
+
+                            <label for="daycheck-4">Jueves</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-5">
+
+                            <label for="daycheck-5">Viernes</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-6">
+
+                            <label for="daycheck-6">Sabado</label>
+
+                            <input type="checkbox" name="tarjetas-daycheck" id="daycheck-7">
+
+                            <label for="daycheck-7">Domingo</label>
+
+                        </div>
+
+        
+
+                        <div class="formcontainer-2">
+
+                            <input type="time" name="tarjetas-daytime" id="daytime-ini">
+
+                            <input type="time" name="tarjetas-daytime" id="daytime-fin">
+
+                        </div>
+
+        
+
+                        <p><b>Limite</b></p>
+                        <div class="formcontainer-2">
+                        <select class="cform-select" id="limite-cant1">
+
+                            <option value="1">Litros</option>
+
+                            <option value="2">Importe</option>
+
+                        </select>
+                        <input type="number" id="limite-cant" class="cform-input" placeholder="Cantidad" style="margin-left: 15px;">
+                        </div>
+
+                        <select class="cform-select" id="limite-periodo">
+
+                            <option value="1">Diario</option>
+
+                            <option value="2">Semanal</option>
+
+                            <option value="3">Mensual</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                    <br>
+
+                <button class="btnfiltrar" onclick="UpDateTarjetas()">Actualizar</button>
+
+                <button class="bttn bttn-success" onclick="downloadPDFWithjsPDF()"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button>
+
+                    
+
+                    <br>
+
+                    <br>
+
+                    <div id="tbltarjetas">
+
+                        <div class="formcontainer-2">
+
+                            
+
+                            <div class="PDFC" id="EncabezadoPDF" style="display: none;">
+
+                        
+
+                        
+
+                            <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                            <h3 class="txtPDF">Oficinas Corporativas
+
+                                Av. Camarón Sábalo s/n,</h3>
+
+                                <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                                    Mazatlán, Sinaloa.</h3>
+
+                                <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                               <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                                    <br>
+
+                        </div>
+
+                        </div>
+
+                        <div class="divtbl-1" >
+
+                        
+
+                        <div class="divtbl-1-header">
+
+                            Lista de Tarjetas
+
+                        </div>
+
+    
+
+                        <table id="tbl-tarjetas">
+
+                            <tr>
+
+                                <th>Estado</th>
+
+                                <th>No. tarjeta</th>
+
+                                <th>Tipo</th>
+
+                                <th>Estaciones</th>
+                                <th>Combustibles</th>
+
+                                <th>Horario</th>
+
+                                <th>Limites</th>
+
+                            </tr>
+
+                            
+
+                        </table>
+
+                        
+
+                    </div>
+
+                </div>
+
+                    <br>
+
+                   <!-- <span>
+
+                        <button class="btnfiltrar" onclick="ActivarDesactivarTar()" >Guardar</button>
+
+                    </span>-->
+
+            </div>
+
+
+
+            <div id="seguridad-usuarios" class="modulehidden">
+
+                <h1>Usuarios web</h1>
+
+                <br>
+
+                <div class="formcontainer-2" id="divusuWeb" style="display: none;">
+
+                    <div class="formcontainer-3">
+
+                         <div class="cform-inputWtext">
+
+                            <b>Nombre:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altauserweb-name" value="">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cform-inputWtext">
+
+                            <b>Usuario:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="text" class="cform-input" id="altauserweb-user">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cform-inputWtext">
+
+                            <b>Contraseña:</b>
+
+                            <div>
+
+                                <span>
+
+                                    <input type="password" class="cform-input" id="altauserweb-pass">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cform-inputWtext">
+
+                            <b>Tipo:</b>
+
+                            <select class="cform-select" id="altauserweb-tipo">
+
+                                <option value="1">1</option>
+
+                                <option value="2">2</option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="formcontainer-2">
+
+                            <input type="checkbox" name="userweb" id="userweb-checkadmin"/>
+
+                            <label for="userweb-checkadmin">Administración</label>
+
+                            <input type="checkbox" name="userweb" id="userweb-checkrepor"/>
+
+                            <label for="userweb-checkrepor">Reportes</label>
+
+                            <input type="checkbox" name="userweb" id="userweb-checkgrafs"/>
+
+                            <label for="userweb-checkgrafs">Gráficas</label>
+
+                            <input type="checkbox" name="userweb" id="userweb-checksecur"/>
+
+                            <label for="userweb-checksecur">Seguridad</label>
+
+                        </div>
+
+
+
+                        
+
+                    </div>
+
+
+
+                </div>
+
+                <button class="btn btn-success" onclick="alta_UsuariosWeb()">Crear usuario</button>
+
+                <br>
+
+                <div class="divtbl-1" id="t-usuweb">
+
+                    <div class="divtbl-1-header">
+
+                        Listado de Usuarios Web
+
+                    </div>
+
+                    
+
+                    <table id="tbl-UsuWeb">
+
+                        <tr>
+
+                            <th>Activar/Descactivar</th>
+
+                            <th>Usuario</th>
+
+                            <th>Nombre</th>
+
+                            
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <br>
+
+                <!--<span>
+
+                    <button class="btnfiltrar" onclick="ActivarDesactivarUW()" >Guardar</button>
+
+                </span>-->
+
+            </div>
+
+
+
+            <div id="seguridad-permisos" class="modulehidden">
+
+                <h1>Mapa</h1>
+
+                <div id="map" style="width:900px; height: 500px"></div>
+
+                <script async="async" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjMYO-A8DQ3OwnUtT78ECnjapY_aCSacE&callback=initMap"></script>
+
+
+
+                <!-- Script para inicializar un mapa -->
+                
+                <script type="text/javascript">
+                function initialize() {
+                        /*var uluru = {
+                            lat: parseFloat("{{ $inmueble->latitude }}"),
+                            lng: parseFloat("{{ $inmueble->longitude }}")
+                        };*/
+                        var map = new google.maps.Map(
+                            document.getElementById("map"), {zoom: 15}
+                        );
+                       // var marker = new google.maps.Marker({position: uluru, map: map});
+                       
+                     }
+                </script>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. 
+
+    <script
+
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbZpk2TtvK4RmixX7_WM-QNWxT8sU9Ld4&callback=initMap&v=weekly"
+
+      async
+
+    ></script>-->
+
+            </div>
+
+
+
+            <div id="reportes-transacciones" class="modulehidden">
+
+                <h1>Servicios</h1>
+
+                <span><button id="graficaserv" class="bttn bttn-success" onclick="serviciosgraf(1)"><i class="fas fa-chart-line"></i>&nbsp Grafica</button></span>
+
+                <span><button style="display: none;" id="tablaserv" class="bttn bttn-success" onclick="serviciosgraf(2)"><i class="fas fa-table"></i>&nbsp Tabla</button></span>
+
+             
+
+                <div id="tabla-grafica-servicios">
+
+                <div class="form-group ">
+
+                    <br>
+
+                    <label>Filtrar por fecha</label>
+
+                </div>
+
+                    <span><input type="date" class="inputfecha" id="fechainiserv"></span>
+
+                    <span><input type="date" class="inputfecha" id="fechafinserv" value="2022-01-03"></span>
+
+                    <span><button class="bttn bttn-success" onclick="filtrarservicios()">Buscar</button></span>
+
+                    <span><button id="graficaserv" class="bttn bttn-success" onclick="downloadPDFWithjsPDF_servicio()"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button></span>
+
+                <br>
+
+                    <div id="tblservicio">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF1" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camarón Sábalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                            Mazatlán, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="divtbl-1">
+
+                    
+
+                    <div class="divtbl-1-header">
+
+                        Historial de Servicios
+
+                    </div>
+
+
+
+                    <table id="tbl-servicios">
+
+                        <tr>
+
+                            
+
+                            <th>Fecha</th>
+
+                            <th>Folio</th>
+
+                            <th>Importe</th>
+
+                            <th>Litros</th>
+
+                            <th>Producto</th>
+
+                            <th>Tarjeta</th>
+
+                        </tr>
+
+                        
+
+                    </table>
+
+                    
+
+                </div>
+
+                </div>
+
+                </div>
+
+                <br>
+
+                <div id="mostrargraf" style="display: none;">
+
+                <button class= "btn-grafica btn" onclick="Cambiartabla1()">Importe</button>
+
+                <button class= "btn-grafica btn" onclick="Cambiartabla2()">Litros</button>
+
+                <span><button class="btn-grafica btn " onclick="PdfDownload('Grafica')"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button></span>
+
+                <select onchange="tablaconsumofiltrado()"type="text" class="cform-select sltarjetas" id="altatarjetas-notarjeta-grafica">        
+
+                </select>
+
+                <br>
+
+                <div id="graficas">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF2" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camaron Sabalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlan, C.P. 82110.
+
+                            Mazatlan, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div id="grafica_consumo">
+
+                    <canvas id="graficaconsumo" ></canvas>
+
+                </div>
+
+                <div id="grafica_servicio">
+
+                    <canvas id="graficaservicios" ></canvas>
+
+                </div>
+
+                 </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div id="reportes-abonos" class="modulehidden">
+
+                <h1>Abonos</h1>
+
+                <!--<div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Tarjeta</label>
+
+                
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Estacion</label>
+
+                        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+
+                            <option data-icon="fa fa-car" value='1220'></option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Chofer</label>
+
+                        <select id="chofer" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+
+                            <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Centro de costos</label>
+
+                        <select id="Centrocosto" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-university" value="0">Seleccione centro costo...</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Tipo reporte</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione tipo reporte</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group" hidden>
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>-->
+
+                <div class="form-group ">
+
+                    <label>Filtrar por fecha</label>
+
+                </div>
+
+                    <input type="date" class="inputfecha" id="fechainiabono" value="2022-01-03">
+
+                    <span><input type="date" class="inputfecha" id="fechafinabono" value="2022-01-03"></span>
+
+                    <span><button class="bttn bttn-success" onclick="filtrarAbono()">Buscar</button></span>
+
+                    <span><button class="bttn bttn-success" onclick="downloadPDFWithjsPDF_abono()"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button></span>
+
+                <br>
+
+                <div id="abonoss">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF5" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camarón Sábalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                            Mazatlán, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                </div>
+
+                </div>
+
+                <div class="divtbl-1">
+
+                    <div class="divtbl-1-header">
+                        Historial de Abonos
+
+                    </div>
+
+
+
+                    <table id="tbl-abonos">
+
+                        <tr>
+
+                            <th>Fecha</th>
+
+                            <th>Concepto</th>
+
+                            <th>Forma de pago</th>
+
+                            <th>Importe</th>
+
+                            <th>Referencia</th>
+
+                        </tr>
+
+                        
+
+                    </table>
+
+                </div>
+
+                </div>
+
+                
+
+            </div>
+
+
+
+            <div id="reportes-rechazos" class="modulehidden">
+
+                <h1>Rechazos</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="reFinicio" value="2022-01-03" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="reFfinal" value="2022-01-03" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <br>
+
+                        <div>
+
+                            <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                            <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+
+                    </div>
+
+                    <div class="form-group ">
+
+                    </div>
+
+                    <div class="form-group ">
+
+                    </div>
+
+                    <div class="form-group ">
+
+                    </div>
+
+                    <div class="form-group ">
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="3">Abonos</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="3">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Concepto</th>
+
+                        <th class="table_column_header">Importe</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="3">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="3" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="reportes-bitacoras" class="modulehidden">
+
+                <h1>Bitácora</h1>
+
+                <div class="form-group ">
+
+                    <label>Filtrar por fecha</label>
+
+                </div>
+
+                   <!--<input type="date" class="inputfecha" id="fechaini" value="2022-01-03">-->
+
+                    <span><input type="date" class="inputfecha" id="fechafin" value="2022-01-03"></span>
+
+                    <span><button class="bttn bttn-success" onclick="filtrarBitacora()">Buscar</button></span>
+
+                    <span><button class="bttn bttn-success" onclick="downloadPDFWithjsPDF_bit()" id="printpdf"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button></span>
+
+                <br>
+
+                <div id="bitacorass">
+
+                <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF6" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camarón Sábalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                            Mazatlán, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                </div>
+
+                </div>
+
+
+
+                <div class="divtbl-1">
+
+                    <div class="divtbl-1-header">
+
+                        Historial de Movimientos
+
+                    </div>
+
+
+
+                    <table id="tbl-bitacora">
+
+                        <tr>
+
+                            <th>Fecha</th>
+
+                            <th>Tipo</th>
+
+                            <th>Descripción</th>
+
+                        </tr>
+
+                        
+
+                    </table>
+
+                    
+
+                </div>
+
+            </div>
+
+               <!-- <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Tarjeta</label>
+
+                
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Estacion</label>
+
+                        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+
+                            <option data-icon="fa fa-car" value='1220'></option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Chofer</label>
+
+                        <select id="chofer" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+
+                            <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                        <select id="Status" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group" hidden>
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="7">Rechazos</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="7">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Descripción</th>
+
+                        <th class="table_column_header">Cuenta</th>
+
+                        <th class="table_column_header">No economico</th>
+
+                        <th class="table_column_header">Chofer</th>
+
+                        <th class="table_column_header">Estación</th>
+
+                        <th class="table_column_header">Producto</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="7">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="7" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>-->
+
+            </div>
+
+
+
+            <div id="reportes-acumulados" class="modulehidden">
+
+                <h1>Acumulados</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Usuarios</label>
+
+                
+
+                        <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <input id="Status1" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <input id="Status2" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status3" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status4" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status5" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                <br>
+
+                <br>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="3">Bitácoras</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="3">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Usuario</th>
+
+                        <th class="table_column_header">Descripción</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="3">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="3" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="reportes-saldos" class="modulehidden">
+
+                <h1>Saldos</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Usuarios</label>
+
+                
+
+                        <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                
+
+                        <select id="placa" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione placa...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                
+
+                        <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione No. economico...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status6" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status7" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status8" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                <br>
+
+                <br>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="10">Acumulados</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="10">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Tarjeta</th>
+
+                        <th class="table_column_header">No economico</th>
+
+                        <th class="table_column_header">Marca</th>
+
+                        <th class="table_column_header">Placas</th>
+
+                        <th class="table_column_header">Periodo</th>
+
+                        <th class="table_column_header">Permitido</th>
+
+                        <th class="table_column_header">Última transacción</th>
+
+                        <th class="table_column_header">Fecha transacción</th>
+
+                        <th class="table_column_header">Saldo</th>
+
+                        <th class="table_column_header">Prox ajuste</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="10">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="10" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="reportes-historico" class="modulehidden">
+
+                <h1>Historico</h1>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="2">Saldos</td>
+
+                    </tr>
+
+                    <tr> 
+
+                        <td colspan="2">Busqueda: <input type="text" name="Busqueda"/></td> 
+
+                    </tr>
+
+                    <tr  class="fila"> 
+
+                        <th class="table_column_header">Cuenta</th>
+
+                        <th class="table_column_header">Saldo</th> 
+
+                    </tr>
+
+                
+
+                    <tr> 
+
+                        <td colspan="2">Visualizando 1 de 1 registros</td> 
+
+                        
+
+                    </tr>   
+
+                    <tr> 
+
+                        <td colspan="2" align="right">Páginas anterior - siguiente</td> 
+
+                    </tr>   
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="reportes-docsemitidos" class="modulehidden">
+
+                <h1>Documentos emitidos</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Usuarios</label>
+
+                
+
+                        <select id="usuarios" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione usuario...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                
+
+                        <select id="placa" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione placa...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                
+
+                        <select id="noeconomico" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione No. economico...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status9" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status10" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status11" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                <br>
+
+                <br>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="9">Historico acumulados</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="9">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Tarjeta</th>
+
+                        <th class="table_column_header">Consumido</th>
+
+                        <th class="table_column_header">Periodo anterior</th>
+
+                        <th class="table_column_header">Transacción anterior</th>
+
+                        <th class="table_column_header">Monto periodo</th>
+
+                        <th class="table_column_header">Periodo actua</th>
+
+                        <th class="table_column_header">Monto transacción</th>
+
+                        <th class="table_column_header">Monto periodo actual</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="9">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="9" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="reportes-rendimiento" class="modulehidden">
+
+                <h1>Rendimiento</h1>
+
+
+
+                <div class="row">
+
+                    <div class="form-group col-md-3 col-lg-3">
+
+                    <span><button id="graficarend" class="bttn bttn-success" onclick="serviciosgraf(3)"><i class="fas fa-chart-line"></i>&nbsp Grafica</button></span>
+
+                    <span><button style="display: none;" id="tablarend" class="bttn bttn-success" onclick="serviciosgraf(4)"><i class="fas fa-table"></i>&nbsp Tabla</button></span>
+
+                </div>
+
+                
+
+                </div>
+
+                <hr>
+
+                <br>
+
+                <div id="tblrend">
+
+                    <div class="row">
+
+                    <div class="form-group col-md-3 col-lg-3">
+
+                        <label><i class="fa fa-credit-card"></i>&nbspTarjeta</label>
+
+                        <select title="Seleccione tarjeta..." id="tarjetaR" data-icon="fa fa-credit-card" class="cform-select sltarjetas"></select>
+
+                    </div>  
+
+                        <div class="form-group col-md-3 col-lg-3">
+
+                            <label><i class="fa fa-calendar-alt"></i>&nbspNo. Fecha de inicio</label>
+
+                            <input type="date" class="inputfecha" id="fechainirend">
+
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-3">
+
+                        <label><i class="fa fa-calendar-alt"></i>&nbspNo. Fecha fin</label>
+
+                        <input type="date" class="inputfecha" id="fechafinrend" value="2022-01-03">
+
+                    </div>
+
+                    
+
+                    </div>
+
+                    <!--<div class="form-group col-md-3 col-lg-3">
+
+                        <label><i class="fas fa-gas-pump"></i>&nbspEstación</label>
+
+                        <select title="Seleccione tarjeta..." id="tarjetaR" data-icon="fa fa-credit-card" class="cform-select slestacion"></select>
+
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-3">
+
+                        <label><i class="fa fa-users"></i>&nbspChofer</label>
+
+                        <select title="Seleccione tarjeta..." id="tarjetaR" data-icon="fa fa-credit-card" class="cform-select slchofer"></select>
+
+                    </div>-->
+
+                    
+
+                    <br>
+
+                    <!--<div class="row1">
+
+                        <div class="form-group col-md-3 col-lg-3">
+
+                            <label><i class="fa fa-car"></i>&nbspPlaca</label>
+
+                            <select title="Seleccione tarjeta..." id="tarjetaR" data-icon="fa fa-credit-card" class="cform-select slplacas"></select>
+
+                        </div>
+
+                        
+
+                        <div class="form-group col-md-3 col-lg-3">
+
+                            <label><i class="fa fa-car"></i>&nbspNo. Economico</label>
+
+                            <select title="Seleccione tarjeta..." id="tarjetaR" data-icon="fa fa-credit-card" class="cform-select slnoeco"></select>
+
+                        </div>
+
+                        </div>-->
+
+                        <br>
+
+                        <div class="row2">
+
+                        <button class="bttn bttn-success"  onclick="filtroRendimiento()"><i class="fa fa-search"></i> Buscar</button>
+
+                        <button class="bttn bttn-success" onclick="downloadPDFWithjsPDF_rend()"><i class="fa fa-print"></i> Imprimir</button></div>
+
+                
+
+                <br>
+
+                
+
+                <br>
+
+                <div id="rendimientoss">
+
+                    <div class="PDF" id="EncabezadoPDF7" style="display: none;">
+
+                        <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                        <h3 class="txtPDF">Oficinas Corporativas
+
+                            Av. Camarón Sábalo s/n,</h3>
+
+                            <h3 class="txtPDF">Lomas de Mazatlán, C.P. 82110.
+
+                                Mazatlán, Sinaloa.</h3>
+
+                            <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                           <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                                <br>
+
+                    </div>
+
+                <div class="divtbl-1">
+
+                <div class="divtbl-1-header">
+
+                    Rendimientos
+
+                </div>
+
+                <table id="tbl-rendimiento">
+
+                    <tr>
+
+                        <th>Fecha</th>
+
+                        <th>Tarjeta</th>
+
+                        <th>Placas</th>
+
+                        <th>No economico</th>
+
+                        <th>Transacción</th>    
+
+                        <th>Estación</th>
+
+                        <th>Chofer</th>
+
+                        <th>Litros</th>
+
+                        <th>Combustible</th>
+
+                        <th>Km Recorridos</th>
+
+                        <th>Rendimiento</th>
+
+                    </tr>
+
+                </table>
+
+                
+
+                </div>
+
+            </div>
+
+            </div>
+
+            
+
+                <div id="graficasrend" style="display: none;">
+
+                    <div>
+
+                            <label for="notarjeta-graficarend"><i class="fa fa-credit-card"></i><b>&nbspSeleccione una tarjeta</b></label>
+
+                            <br>
+
+                            <select onchange="rendimientoFiltrado()" id="notarjeta-graficarend" class="cform-select sltarjetas"></select>
+
+                            <button class="btn" onclick="PdfDownload('Rendimiento')"><i class="far fa-file-pdf"></i>&nbsp Imprimir</button>
+
+                        
+
+                        
+
+                           
+
+                        
+
+                    </div>
+
+                    
+
+                    
+
+                    <div id="graficaderendimiento">
+
+                    <div class="formcontainer-2">
+
+    
+
+                    <div class="PDFC" id="EncabezadoPDF8" style="display: none;">
+
+                
+
+                
+
+                    <h1 class="txtPDFT">Monedero Grupo Petromar S.A. de C.V.</h1>
+
+                    <h3 class="txtPDF">Oficinas Corporativas
+
+                        Av. Camaron Sabalo s/n,</h3>
+
+                        <h3 class="txtPDF">Lomas de Mazatlan, C.P. 82110.
+
+                            Mazatlan, Sinaloa.</h3>
+
+                        <h3 class="txtPDF">Tel. (669) 986 15 13</h3>
+
+                       <h3 class="txtPDF">ventas@grupopetromar.com</h3> 
+
+                            <br>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div id="grafica_rend">
+
+                    <canvas id="graficarendimiento" ></canvas>
+
+                </div>
+
+                </div>
+
+                 </div>
+
+
+
+            </div>
+
+
+
+            <div id="reportes-recorridoscargas" class="modulehidden">
+
+                <h1>Recorridos vs Cargas</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Tarjeta</label>
+
+                
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Estacion</label>
+
+                        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+
+                            <option data-icon="fa fa-car" value='1220'></option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Chofer</label>
+
+                        <select id="chofer" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+
+                            <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status12" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                        <select id="Status13" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                        <select id="Status14" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <input id="Status15" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group" hidden>
+
+                        <input id="Status16" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status17" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status18" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="12">Rendimiento</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="12">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Tarjeta</th>
+
+                        <th class="table_column_header">No economico</th>
+
+                        <th class="table_column_header">Placas</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Transacción</th>
+
+                        <th class="table_column_header">Estación</th>
+
+                        <th class="table_column_header">Chofer</th>
+
+                        <th class="table_column_header">Litros</th>
+
+                        <th class="table_column_header">Combustible</th>
+
+                        <th class="table_column_header">Odometro</th>
+
+                        <th class="table_column_header">Km recorridos</th>
+
+                        <th class="table_column_header">Rendimiento</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="12">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="12" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="graficas-consumos" class="modulehidden">
+
+                <h1>Consumos</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Tarjeta</label>
+
+                
+
+                        <select id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-credit-card" value="0">Seleccione tarjeta...</option>
+
+                            <option data-icon="fa fa-credit-card" value='1282'>4550000004000585</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Estacion</label>
+
+                        <select id="estacion" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione estación...</option>
+
+                            <option data-icon="fa fa-car" value='1220'></option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                    <div class="form-group">
+
+                        <label>Chofer</label>
+
+                        <select id="chofer" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fa fa-car" value="0">Seleccione chofer...</option>
+
+                            <option data-icon="fa fa-car" value='1220'>XXXX0000</option>
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Centro de costos</label>
+
+                        <select id="costos" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione centro de costos...</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label>Placa</label>
+
+                        <select id="Status19" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione placa...</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>No economico</label>
+
+                        <select id="Status20" class="select" data-live-search="true" data-width="100%">
+
+                            <option data-icon="fas fa-th-list" value="">Seleccione No economico</option>
+
+                            <option data-icon="far fa-circle" value="A">Activo</option>
+
+                            <option data-icon="fas fa-circle" value="B">Desactivado</option>
+
+                
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <input id="Status21" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group" hidden>
+
+                        <input id="Status22" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status23" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status24" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                <br>
+
+                <!--<table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="12">Transacciones</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="12">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">No economico</th>
+
+                        <th class="table_column_header">Placas</th>
+
+                        <th class="table_column_header">Chofer</th>
+
+                        <th class="table_column_header">Tarjeta</th>
+
+                        <th class="table_column_header">Litros</th>
+
+                        <th class="table_column_header">Producto</th>
+
+                        <th class="table_column_header">Monto</th>
+
+                        <th class="table_column_header">Estación</th>
+
+                        <th class="table_column_header">Ubicación</th>
+
+                        <th class="table_column_header">Fecha</th>
+
+                        <th class="table_column_header">Transacción</th>
+
+                        <th class="table_column_header">Recorrido</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="12">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="12" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>-->
+
+                
+
+                
+
+                
+
+               
+
+            </div>
+
+
+
+            <div id="graficas-top" class="modulehidden">
+
+                <h1>Top 10 consumos</h1>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="3">Consumos de IVA</td>
+
+                    </tr>
+
+                    <tr> 
+
+                        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+
+                    </tr>
+
+                    <tr  class="fila"> 
+
+                        <th class="table_column_header">Subtotal</th>
+
+                        <th class="table_column_header">IVA</th>
+
+                        <th class="table_column_header">Total</th> 
+
+                    </tr>
+
+                
+
+                    <tr> 
+
+                        <td colspan="3">Visualizando 1 de 1 registros</td> 
+
+                        
+
+                    </tr>   
+
+                    <tr> 
+
+                        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+
+                    </tr>   
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="graficas-rendimiento" class="modulehidden">
+
+                <h1>Rendimiento</h1>
+
+                <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="3">Totales</td>
+
+                    </tr>
+
+                    <tr> 
+
+                        <td colspan="3">Busqueda: <input type="text" name="Busqueda"/></td> 
+
+                    </tr>
+
+                    <tr  class="fila"> 
+
+                        <th class="table_column_header">Litros</th>
+
+                        <th class="table_column_header">Litros</th>
+
+                        <th class="table_column_header">Totales</th>
+
+                    </tr>
+
+                
+
+                    <tr> 
+
+                        <td colspan="3">Visualizando 1 de 1 registros</td> 
+
+                        
+
+                    </tr>   
+
+                    <tr> 
+
+                        <td colspan="3" align="right">Páginas anterior - siguiente</td> 
+
+                    </tr>   
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div id="graficas-rechazos" class="modulehidden">
+
+                <h1>Rechazos</h1>
+
+               <!-- <table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="4">Productos</td>
+
+                    </tr>
+
+                    <tr> 
+
+                        <td colspan="4">Busqueda: <input type="text" name="Busqueda"/></td> 
+
+                    </tr>
+
+                    <tr  class="fila"> 
+
+                        <th class="table_column_header">Clave</th>
+
+                        <th class="table_column_header">Producto</th>
+
+                        <th class="table_column_header">Monto</th>
+
+                        <th class="table_column_header">Litros</th> 
+
+                    </tr>
+
+                
+
+                    <tr> 
+
+                        <td colspan="4">Visualizando 1 de 1 registros</td> 
+
+                        
+
+                    </tr>   
+
+                    <tr> 
+
+                        <td colspan="4" align="right">Páginas anterior - siguiente</td> 
+
+                    </tr>   
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>-->
+
+                <canvas id="graficarechazos" ></canvas>
+
+            </div>
+
+
+
+            <div id="graficas-promedio" class="modulehidden">
+
+                <h1>Promedio</h1>
+
+                <div class="filtros">
+
+                    &nbsp; <i class="fa fa-calendar-o  "></i> &nbsp; <b><label>Filtros</label></b>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="form-group ">
+
+                        <label>Fecha inicio</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <label>Fecha fin</label>
+
+                        <input type="date" id="tarjeta" class="select" data-live-search="true" data-width="100%">
+
+                    </div>
+
+                
+
+                    <div class="form-group ">
+
+                        <input id="Status25" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input id="Status26" style="width:190px; visibility: hidden;" data-live-search="true" data-width="100%" />
+
+                
+
+                    </div>
+
+                
+
+                
+
+                </div>
+
+                <br>
+
+                
+
+                <button class="bttn bttn-success"><i class="fa fa-search"></i> Buscar</button>
+
+                <button class="bttn bttn-success"><i class="fa fa-print"></i> Imprimir</button>
+
+                
+
+                <!--<table class="table">
+
+                    <tr class="table_header">
+
+                        <td align="center" colspan="5">Top 10 consumos</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="5">Busqueda: <input type="text" name="Busqueda" /></td>
+
+                    </tr>
+
+                    <tr class="fila">
+
+                        <th class="table_column_header">Tarjeta</th>
+
+                        <th class="table_column_header">Monto</th>
+
+                        <th class="table_column_header">Litros</th>
+
+                        <th class="table_column_header">Placas</th>
+
+                        <th class="table_column_header">No economico</th>
+
+                    </tr>
+
+                
+
+                    <tr>
+
+                        <td colspan="5">Visualizando 1 de 1 registros</td>
+
+                
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="5" align="right">Páginas anterior - siguiente</td>
+
+                    </tr>
+
+                    <tr class="fila_inferior">
+
+                    </tr>
+
+                </table>-->
+
+                
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+
+
+<script>
+
+    window.onload = function StartingFuncs(){
+
+        var sidebtns = document.getElementsByClassName("sidebtn");
+
+        for(const element of sidebtns){
+
+            element.addEventListener("click", function(){sidedrop(this)});
+
+        }
+
+        validar();
+
+        headerDate();
+
+        
+        nomUsu();
+
+        fechadehoy();
+
+        fechaanterior();
+        
+        leer_ProdyEsta();
+
+        leer_Servicios();
+
+        
+        leer_estaciones();
+
+        leer_Vehiculos();
+
+        leer_UsuarioWeb();
+
+        leer_Bitacora();    
+
+        leer_Choferes();
+
+        leer_facturas();
+
+        leer_rendimiento();
+
+        
+
+        leer_Complementos();
+        
+
+        leer_prodRel();
+        leer_Abonos();
+        leer_combustibles();
+        
+        
+
+        initMap();
+        
+
+       
+
+        
+
+    }
+
+
+
+    function sidedrop(e){
+
+        var drop = e.nextElementSibling;
+
+        if(drop.style.maxHeight == "300px"){
+
+            drop.style.maxHeight = "0px";
+
+        } else {
+
+            drop.style.maxHeight = "300px";
+
+        }
+
+    }
+
+
+
+    function hideVisibleModule(){
+
+        if(document.getElementsByClassName("modulevisible")[0]){
+
+            var module = document.getElementsByClassName("modulevisible")[0];
+
+            module.style.display = "none";
+
+            module.classList.remove("modulevisible");
+
+            module.classList.add("modulehidden");
+
+        }
+
+    }
+
+
+
+    function moduleChange(todisplay){
+
+        hideVisibleModule();
+
+        var module = document.getElementById(todisplay);
+
+        module.style.display = "block";
+
+        module.classList.add("modulevisible");
+
+        module.classList.remove("modulehidden");
+
+    }
+
+
+
+    
+
+
+
+</script>
+
+
+ 
+
+
+
+   
+</html>

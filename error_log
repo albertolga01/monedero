@@ -1,0 +1,56 @@
+[11-Dec-2021 17:38:56 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 10
+[11-Dec-2021 17:39:08 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 10
+[11-Dec-2021 17:51:35 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Could not connect to host in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:33
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://gasunion...', '#login', 1, 0)
+#1 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(33): SoapClient->__call('login', Array)
+#2 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 33
+[11-Dec-2021 17:51:45 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Could not connect to host in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:33
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://gasunion...', '#login', 1, 0)
+#1 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(33): SoapClient->__call('login', Array)
+#2 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 33
+[11-Dec-2021 17:51:58 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Could not connect to host in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:33
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://gasunion...', '#login', 1, 0)
+#1 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(33): SoapClient->__call('login', Array)
+#2 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 33
+[11-Dec-2021 17:54:15 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Could not connect to host in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:35
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://gasunion...', '#login', 1, 0)
+#1 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(35): SoapClient->__call('login', Array)
+#2 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 35
+[11-Dec-2021 17:54:51 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Could not connect to host in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:35
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://gasunion...', '#login', 1, 0)
+#1 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(35): SoapClient->__call('login', Array)
+#2 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 35
+[11-Dec-2021 17:57:45 UTC] PHP Fatal error:  Uncaught SoapFault exception: [10] Invalid Login in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:35
+Stack trace:
+#0 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(35): SoapClient->__call('login', Array)
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 35
+[11-Dec-2021 17:57:47 UTC] PHP Fatal error:  Uncaught SoapFault exception: [10] Invalid Login in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:35
+Stack trace:
+#0 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(35): SoapClient->__call('login', Array)
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 35
+[11-Dec-2021 17:58:38 UTC] PHP Fatal error:  Uncaught SoapFault exception: [WSDL] SOAP-ERROR: Parsing WSDL: Couldn't load from 'http://gasuniondeamerica.sgcweb.com.mx/ws/1094AEV2/v2/soap.php' : Premature end of data in tag html line 2
+ in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php:28
+Stack trace:
+#0 /home/jkmpg7ol/public_html/compras/monedero/soaptest.php(28): SoapClient->SoapClient('http://gasunion...')
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/compras/monedero/soaptest.php on line 28
+[02-May-2022 17:41:59 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 58
+[02-May-2022 17:43:05 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 58
+[02-May-2022 17:43:59 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 59
+[02-May-2022 17:44:00 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 59
+[02-May-2022 17:44:02 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 55
+[02-May-2022 17:45:28 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 59
+[02-May-2022 17:45:59 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 58
+[02-May-2022 17:47:15 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 58
