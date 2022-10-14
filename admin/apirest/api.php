@@ -2,6 +2,46 @@
 
 class Api{
 
+
+	
+	public function getTarjetaFPlaca($idvehiculo){
+		$conexion = new Conexion();
+		$db = $conexion->getConexion();
+		
+	
+		$Query = "SELECT t2.folio, t2.notarjeta FROM vehiculos t1 INNER JOIN tarjetas t2 ON t1.idtarjeta = t2.folio WHERE t1.idvehiculo = '".$idvehiculo."'";
+	 
+		$consultad = $db->prepare($Query);
+		$consultad->execute();
+		while($filau = $consultad->fetch()){
+			//$clientes[] = $filau['idchofer'];
+			$notarjeta = $filau['folio'];
+		}
+	
+		return $notarjeta;
+	
+	}
+
+	public function getPlacas($cte){
+		$conexion = new Conexion();
+		$db = $conexion->getConexion();
+		$placa = array();
+		$Query = "SELECT idvehiculo,  placas  FROM  vehiculos   WHERE idcliente = '".$cte."'";
+	
+		$consultad = $db->prepare($Query);
+		$consultad->execute(); 
+		while($filau = $consultad->fetch()){
+			//$clientes[] = $filau['idchofer']; 
+			$placa[] = array(
+				'placas'=> $filau['placas'],
+				'idvehiculo'=> $filau['idvehiculo']
+			); 
+		}
+	
+		return $placa;
+	
+	}
+
 	public function getPlacaFTarjeta($numeroTarjeta){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
@@ -273,7 +313,7 @@ class Api{
 		return $aplicaciones;
 	}
 
-	public function generarFactura($idcliente, $folio, $fecha){
+	public function generarFactura($idcliente, $folio, $fecha, $periodoi, $periodof){
 		$facturares = array();
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
@@ -344,7 +384,7 @@ class Api{
 
 
 		//insert facturas 
-		$Query = "INSERT INTO facturas (idcliente, fechafacturacion, importe, restante, cantidad, fechavencimiento) values ('".$idcliente."','".$fecha."','".$suma."','".$suma."','".$litros."', '".$FechaV."')";
+		$Query = "INSERT INTO facturas (idcliente, fechafacturacion, importe, restante, cantidad, fechavencimiento, periodoi, periodof) values ('".$idcliente."','".$fecha."','".$suma."','".$suma."','".$litros."', '".$FechaV."', '".$periodoi."', '".$periodof."')";
 	 
 		if ($db->query($Query) == TRUE) {
 			//get last id 
@@ -835,11 +875,25 @@ class Api{
 		}
 		return $clientes;
 	}
-	public function obtenerServicios($idcliente, $fechainicial, $fechafinal){
+	public function obtenerServicios($idcliente, $fechainicial, $fechafinal, $idtarjeta){
 		$clientes = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
-		$Query = "SELECT * FROM servicios where idcliente = '".$idcliente."' and DATE(fecha) >= '".$fechainicial."' and DATE(fecha) <= '".$fechafinal."'  and facturado = '0' and cancelado = '0'";
+		if($idtarjeta == ""){
+			echo $idtarjeta;
+			$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+			INNER JOIN tarjetas t2 ON t1.tarjeta = t2.notarjeta
+			INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo 
+			INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
+			where t1.idcliente = '".$idcliente."' and DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0'";
+		}else{
+			$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+			inner join tarjetas t2 on t1.tarjeta = t2.notarjeta	 
+			INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo
+			INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
+			where t1.idcliente = '".$idcliente."' and DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0' and t2.folio = '".$idtarjeta."'";
+		}
+		
 		$consultad = $db->prepare($Query);  
 		$consultad->execute();
 		while($filau = $consultad->fetch()){
@@ -907,6 +961,26 @@ class Api{
 			echo "0";
 		}
 
+	}
+
+	public function actualizarNip($idchofer, $nip){
+		$conexion = new Conexion(); 
+		$db = $conexion->getConexion();
+		$contador = 0;
+		$folios = 0;
+		$i =0;
+
+		$Query = "UPDATE choferes SET nip = '".$nip."'  where idchofer = '".$idchofer."'";
+		if ($db->query($Query) == TRUE) {
+			$contador=$contador+1;
+		} else {
+			$contador = 0;
+		}
+		if($contador==1){
+			echo "1";
+		}else{
+			echo "0";
+		}
 	}
 
 	public function CancelarFacturas($factura){
@@ -1041,6 +1115,21 @@ class Api{
 		}else{
 			$Query = "SELECT * FROM estaciones where idgrupoest = '".$grupo."'";
 		}
+		
+		$consultad = $db->prepare($Query);
+		$consultad->execute();
+		while($filau = $consultad->fetch(PDO::FETCH_OBJ)){
+			$estaciones[] = $filau;
+		}
+		return $estaciones;
+	}
+
+	public function getTodasEstaciones(){
+		$estaciones = array();
+		$conexion = new Conexion();
+		$db = $conexion->getConexion(); 
+			$Query = "SELECT t1.codigo, t1.nombre, t1.direccion, t1.calle, t1.colonia, t1.claveestacion, t1.lat, t1.longi, t2.rzonsocial FROM estaciones t1 INNER JOIN grupo t2 ON t1.idgrupoest = t2.idgrupo";
+		 
 		
 		$consultad = $db->prepare($Query);
 		$consultad->execute();

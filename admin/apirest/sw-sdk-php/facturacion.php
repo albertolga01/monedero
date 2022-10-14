@@ -57,7 +57,7 @@ foreach ($idFacturas as $iterated) {
     }
 }
 
-$Query1 = "SELECT * FROM productos";
+$Query1 = "SELECT * FROM productos  where activo = '1'";
 $consulta = $db->prepare($Query1);
     $consulta->execute();
     while($filau = $consulta->fetch(PDO::FETCH_OBJ)){
@@ -103,7 +103,7 @@ function formatData($factura, $servicios, $productos){
         $cfdi["Receptor"]["DomicilioFiscalReceptor"] = "82110";       //CAMPO 4.0
         $cfdi["Receptor"]["RegimenFiscalReceptor"] = "601";                     //CAMPO 4.0
         $cfdi["Receptor"]["NumRegIdTrib"] = null;
-        $cfdi["Receptor"]["UsoCFDI"] = "P01"; 
+        $cfdi["Receptor"]["UsoCFDI"] = "G03"; 
         $conceptos = array();
 
         foreach($servicios as $iterated){
@@ -169,21 +169,36 @@ function formatData($factura, $servicios, $productos){
         $edoCombutibleBody["Version"] = "1.2";
         $edoCombutibleBody["TipoOperacion"] = "Tarjeta";
         $edoCombutibleBody["NumeroDeCuenta"] = "12355";
-        $edoCombutibleBody["SubTotal"] = number_format($sumaSubTotal, 2);//number_format(20.68, 2);
-        $edoCombutibleBody["Total"] = number_format($factura->importe, 2);//number_format($sumaTotal ,2);
-        $conceptos1 = array();
+         $conceptos1 = array();
 
         foreach($servicios as $iterated){
 
             foreach($productos as $prod){
                 if($iterated->producto == $prod->folio){
+                    
                     $tipoCombustible = $prod->tipocombustible;
                     $nomCombustible = $prod->codigo." ".$prod->nombre;
- 
+                    $tipoCombustible = $tipoCombustible - 1;
                     $unitario1 = ($iterated->preciounitario) * 0.84;
+                    //$unitar
+                    if($prod->tipocombustible == "1"){
+                        $ieps = 0.48472;
+                    }
+                    if($prod->tipocombustible == "2"){
+                        $ieps = 0.591449;
+                    }
+                    if($prod->tipocombustible == "3"){
+                        $ieps = 0.402288;
+                    } 
+
                     $importe1 = ($iterated->importe) / 1.16;
+                    $iepsdif = $ieps * $iterated->litros;
+                    $base = (($iterated->importe)-$iepsdif)/1.16;
+                    $importefinal = $base + $iepsdif;
+                    $punitariofinal = $importefinal / $iterated->litros;
+                    
             $concepto1["Identificador"] = $iterated->tarjeta ;//num de tarjeta
-            $concepto1["Fecha"] =  date('Y-m-d\TH:i:s', strtotime(date('Y-m-d\TH:i:s'). ' - 12 hour'));
+            $concepto1["Fecha"] =  date('Y-m-d\TH:i:s', strtotime($iterated->fecha. ' - 12 hour'));
             $concepto1["Rfc"] = $factura->rfc;//RFC del grupito al que pertenece la estacion donde se realizó el servicio
             $concepto1["ClaveEstacion"] = $iterated->claveestacion;
             $concepto1["Cantidad"] = number_format($iterated->litros, 2);
@@ -191,16 +206,18 @@ function formatData($factura, $servicios, $productos){
             $concepto1["Unidad"] = "Litro";
             $concepto1["NombreCombustible"] = (string)$nomCombustible;
             $concepto1["FolioOperacion"] = $iterated->folio;
-            $concepto1["ValorUnitario"] = number_format($unitario1, 2); //number_format($uni, 2);
-            $concepto1["Importe"] = number_format(($iterated->importe)/1.16, 2);
-            
+            $concepto1["ValorUnitario"] = "" .round($punitariofinal, 2); //number_format($uni, 2);
+            $concepto1["Importe"] = "" .round(($importefinal), 2);
+            $subT += round($importefinal, 2);
            // $concepto1["ObjetoImp"] = "01";     //CAMPO 4.0
             
            // $trasladitos["Base"] = number_format(($iterated->importe / 1.16), 2);
+            //$base = (($iterated->preciounitario * $iepsm) / 1.16) * $iterated->litros;
             
             $trasladitos["Impuesto"] = "IVA";//IVA
             $trasladitos["TasaOCuota"] = "0.16";
-            $trasladitos["Importe"] = number_format((($iterated->importe)/1.16) * 0.16, 2);
+            $trasladitos["Base"] = "" .round($base, 2);
+            $trasladitos["Importe"] = number_format(($base) * 0.16, 2);
           //  $trasladitos["TipoFactor"] = "Tasa";
 
             $traslados[0] = $trasladitos;
@@ -215,8 +232,11 @@ function formatData($factura, $servicios, $productos){
             
 
 
-            
+             
         }
+        $edoCombutibleBody["SubTotal"] = bcdiv($subT, 1, 2);//number_format(20.68, 2);
+        $edoCombutibleBody["Total"] = $factura->importe;//number_format($sumaTotal ,2);
+      
         
         $edoCombutibleBody["Conceptos"] = $conceptos1;
 
@@ -235,8 +255,9 @@ function formatData($factura, $servicios, $productos){
     $json_string = json_encode($cfdi, JSON_PRETTY_PRINT);
     
         
-    //echo $json_string;
+ //  echo $json_string;
         $toSend = json_encode($cfdi);
+        //echo $toSend;
     return $toSend;
 }
 
@@ -291,7 +312,7 @@ function swTimbrado($toSend, $factura, $folio){
     
     if((string)$resultadoJson->status == "success"){
         // var_dump($resultadoJson);
-        $nombre = generateQr($resultadoJson->data->qrCode, $factura, $folio);
+      $nombre = generateQr($resultadoJson->data->qrCode, $factura, $folio);
         $rutaxml = generateXml($resultadoJson->data->cfdi, $factura, $folio);
         updateBD(
             $resultadoJson->data->fechaTimbrado,

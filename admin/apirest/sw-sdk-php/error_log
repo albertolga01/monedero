@@ -3280,3 +3280,69 @@ Stack trace:
 [14-Jul-2022 22:56:42 UTC] PHP Warning:  main(): Node no longer exists in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturaestacionpdf.php on line 69
 [14-Jul-2022 23:02:22 UTC] PHP Warning:  main(): Node no longer exists in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturaestacionpdf.php on line 69
 [15-Jul-2022 15:19:00 UTC] PHP Warning:  main(): Node no longer exists in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturaestacionpdf.php on line 69
+[04-Oct-2022 19:10:37 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 193
+[04-Oct-2022 19:10:41 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 193
+[04-Oct-2022 22:58:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:442
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 442
+[04-Oct-2022 23:05:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:442
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 442
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 110
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 110
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 110
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 176
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 176
+[04-Oct-2022 23:14:03 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 176
+[04-Oct-2022 23:14:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:442
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 442
+[04-Oct-2022 23:19:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:442
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 442
+[04-Oct-2022 23:32:59 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:443
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 443
+[04-Oct-2022 23:37:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:443
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 443
+[05-Oct-2022 00:20:57 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:454
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 454
+[05-Oct-2022 14:43:11 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 29
+[05-Oct-2022 14:43:11 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 45
+[05-Oct-2022 14:43:44 UTC] PHP Parse error:  syntax error, unexpected '"', expecting ',' or ';' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 511
+[05-Oct-2022 15:01:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:480
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 480
+[05-Oct-2022 15:35:08 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:489
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 489
+[05-Oct-2022 16:02:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:496
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 496
+[05-Oct-2022 16:08:29 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:498
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 498
+[05-Oct-2022 16:29:44 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:515
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 515
+[13-Oct-2022 15:04:25 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 210
+[13-Oct-2022 15:04:34 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 210
+[13-Oct-2022 15:07:10 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturacion.php on line 211
+[13-Oct-2022 15:35:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function formatDate() in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php:515
+Stack trace:
+#0 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/admin/apirest/sw-sdk-php/facturapdf.php on line 515

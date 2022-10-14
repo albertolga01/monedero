@@ -16,14 +16,14 @@ generarBitacora();
         $registros = array();
         $x = 0;
         $dias = 31; 
-        $num = 108387;  
+        $num = 108726;  
         $fanterior = "2022-01-01T01:01:01-06:00";
 		$diaAnterior = 1;
         for($i = 1; $i<=$dias; $i++){
         $no = rand(4, 7);
             for($a = 0; $a < $no; $a++){
 
-                $date1 = DateTime::createFromFormat('Y-m-d', '2022-06-'.$i);
+                $date1 = DateTime::createFromFormat('Y-m-d', '2022-08-'.$i);
                 $tipo = rand(1, 3);
                 
                 if($tipo == 1){
@@ -55,7 +55,7 @@ generarBitacora();
                 $min =  rand(1, 59);
                 $seg =  rand(1, 59);
 
-                $datetime = new DateTime('2022-06-'.$i.' '.$hora.':'.$min.':'.$seg.' -06:00'); 
+                $datetime = new DateTime('2022-08-'.$i.' '.$hora.':'.$min.':'.$seg.' -06:00'); 
                 $d = $datetime->format(DATE_ATOM);
                 if($d<$fanterior){
                     goto restart;

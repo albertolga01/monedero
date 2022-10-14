@@ -11,7 +11,7 @@ class Api{
 		$conexion = new Conexion();   
 		$db = $conexion->getConexion(); 
 		$Query = "SELECT DATE_FORMAT(t1.fecha, '%m/%d/%Y %h:%i:%s %p') as fecha, t2.nombre as estacion, t1.folio from servicios t1 
-		inner join estaciones t2 on t1.estacion = t2.idestacion where   date(fecha) =  '".$fecha."' "; 
+		inner join estaciones t2 on t1.estacion = t2.idestacion where   date(fecha) =  '".$fecha."' and t1.cancelado = '0'"; 
 		$consultad = $db->prepare($Query);  
 		$consultad->execute(); 
 		$i = 0;
@@ -141,14 +141,14 @@ class Api{
 
 
 
-		$Query = "SELECT t2.tipocliente, t5.limiteCredito, t1.tipoperiodo, t2.idcliente, t1.horarioinicial, t1.horariofinal, t1.lunes, t1.martes, t1.miercoles, t1.jueves, t1.viernes, t1.sabado, t1.domingo, t1.folio as foliotarjeta, t1.tipolimite,  t2.rzonsocial, t2.nombre, t2.tipocliente, t1.notarjeta, t1.nip, t1.limitedinero, t1.limitelitros, (SELECT IFNULL(sum(importedisponibleabono),0) from abonos where IDclienteAbono='".$idcte."') AS saldoabono, t4.idvehiculo, t4.modelo, 
+		$Query = "SELECT t4.placas, t2.tipocliente, t5.limiteCredito, t1.tipoperiodo, t2.idcliente, t1.horarioinicial, t1.horariofinal, t1.lunes, t1.martes, t1.miercoles, t1.jueves, t1.viernes, t1.sabado, t1.domingo, t1.folio as foliotarjeta, t1.tipolimite,  t2.rzonsocial, t2.nombre, t2.tipocliente, t1.notarjeta, t1.nip, t1.limitedinero, t1.limitelitros, (SELECT IFNULL(sum(importedisponibleabono),0) from abonos where IDclienteAbono='".$idcte."') AS saldoabono, t4.idvehiculo, t4.modelo, 
 	
 		IFNULL(t4.odometro, 0) as odometro,   
 		t4.controlaodometro,
 		IFNULL(t4.kmmin, 1) kmmin, 
-		IFNULL((Select sum(restante) from servicios where idcliente = '".$idcte."'),0) as saldoservicios,
+		IFNULL((Select sum(restante) from servicios where idcliente = '".$idcte."' and cancelado = '0'),0) as saldoservicios,
 
-		(Select IFNULL(SUM(restante), 0 ) from servicios where idcliente = '".$idcte."' and tarjeta = '".$noTarjeta."') as saldotarjeta
+		(Select IFNULL(SUM(restante), 0 ) from servicios where idcliente = '".$idcte."' and tarjeta = '".$noTarjeta."' and cancelado = '0') as saldotarjeta
 
 		 
 
@@ -180,19 +180,19 @@ class Api{
 		if($periodo == "1"){
 			//diario
 
-			$cargas = "SELECT 	IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where day(fecha)=day(now()) and tarjeta = '".$noTarjeta."'";
+			$cargas = "SELECT 	IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where day(fecha)=day(now()) and tarjeta = '".$noTarjeta."' and cancelado = '0'";
 		}
 		if($periodo == "2"){
 			//semanal
-			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where week(fecha)=week(now()) and tarjeta = '".$noTarjeta."'";
+			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where week(fecha)=week(now()) and tarjeta = '".$noTarjeta."' and cancelado = '0'";
 		}
 		if($periodo == "3"){
 			//mensual quincenal
-			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where month(fecha)=month(now()) and tarjeta = '".$noTarjeta."'";
+			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where month(fecha)=month(now()) and tarjeta = '".$noTarjeta."' and cancelado = '0'";
 		}
 		if($periodo == "4"){
 			//mensual
-			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where month(fecha)=month(now()) and tarjeta = '".$noTarjeta."'";
+			$cargas = "SELECT IFNULL(sum(litros), 0) as consumidoLitros, IFNULL(sum(importe), 0) as consumidoImporte  from servicios where month(fecha)=month(now()) and tarjeta = '".$noTarjeta."' and cancelado = '0'";
 		}
  
 
@@ -487,19 +487,24 @@ class Api{
 				$total = $Limitecliente['limiteCredito']-$total;
 			}
 			
-			$ultimosserv="SELECT folio FROM servicios ORDER BY folio Desc limit 1";
-			$consultad = $db->prepare($ultimosserv);
-				$consultad->execute();
-				$ultimoServ = $consultad->fetch(PDO::FETCH_OBJ);
-				
-				$ultimoServ = (array)$ultimoServ;
-				//print_r($ultimoServ) ;
-				$ultimoServ = $ultimoServ['folio'];
-				$ultimoServ = $ultimoServ+1;
-				//echo "Ultimo";
-				//echo $ultimoServ;
+			
 	
 			if($total>=0){
+
+				$ultimosserv="SELECT folio FROM servicios ORDER BY folio Desc limit 1";
+				$consultad = $db->prepare($ultimosserv);
+					$consultad->execute();
+					$ultimoServ = $consultad->fetch(PDO::FETCH_OBJ);
+					
+					$ultimoServ = (array)$ultimoServ;
+					//print_r($ultimoServ) ;
+					$ultimoServ = $ultimoServ['folio'];
+					$ultimoServ = $ultimoServ+1;
+					//echo "Ultimo";
+					//echo $ultimoServ;
+
+
+				
 				if($tipocliente['tipocliente']=="0"){
 					//echo "entró";
 					$QueryACTlimite = "SELECT IDabono, importedisponibleabono FROM abonos WHERE iDclienteAbono='".$cliente."' AND importedisponibleabono >'0' order by fecha asc";

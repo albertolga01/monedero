@@ -433,7 +433,7 @@ if($method == "POST"){
 
     if($_POST["id"] == "coordenadasEstaciones"){
         $json = null; 
-        $api = new Api(); 
+        $api = new Api();  
         $json = $api->coordenadasEstaciones();
         echo json_encode($json); /**/ 
     }

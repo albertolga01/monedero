@@ -607,3 +607,7 @@ Stack trace:
 #0 {main}
   thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/index.php on line 77
 [24-Aug-2022 16:38:10 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
+[29-Aug-2022 16:41:50 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
+[29-Aug-2022 16:48:30 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
+[29-Aug-2022 16:56:35 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
+[29-Aug-2022 17:00:44 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440

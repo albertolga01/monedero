@@ -566,6 +566,20 @@ body{
     position: relative;
     left: 350px;
 }
+.btnfiltrar3{
+    font-size: 14px;
+    color: #000;
+    padding: 6px 25px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #f8f884;
+    border-color: #fced51;
+    margin-left: 1px;
+    margin-right: 5px;
+    position: relative;
+    left: 11px;
+}
 .btnfiltrar23{
     font-size: 14px;
     color: #000;

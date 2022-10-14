@@ -380,7 +380,7 @@ class Api{
 	public function getFacturas($cte){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.folio, t1.fechagenerado, t1.importe, t1.restante, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = {$cte} order by t1.fechagenerado desc LIMIT 25";
+		$Query = "SELECT t1.timbrado, t1.folio, t1.fechagenerado, t1.importe, t1.restante, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = {$cte} order by t1.fechagenerado desc LIMIT 25  and t1.timbrado = '1'";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		$i = 0;
@@ -550,7 +550,11 @@ class Api{
 	public function getTransacciones($idcliente){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.*, t2.nombre FROM servicios t1 inner join productos t2 on t2.folio=t1.producto WHERE t1.idcliente = {$idcliente} order by fecha DESC";
+		$Query = "SELECT t1.*, t2.nombre, t3.nombre as nombrechofer
+		FROM servicios t1 
+		inner join productos t2 on t2.folio=t1.producto 
+		INNER JOIN choferes t3 ON t3.idchofer = t1.idchofer
+		WHERE t1.idcliente = {$idcliente} order by fecha DESC";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		while($filau = $consultad->fetch(PDO::FETCH_OBJ)){
@@ -668,7 +672,12 @@ class Api{
 		$servicios = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.*, t2.nombre FROM servicios t1 inner join productos t2 on t2.folio=t1.producto where t1.idcliente = '".$idcliente."' and date(t1.fecha) >= '".$fechainicial."' and date(t1.fecha) <= '".$fechafinal."' order by fecha DESC";
+		$Query = "SELECT t1.*, t2.nombre, t3.nombre as nombrechofer 
+		FROM servicios t1 
+		inner join productos t2 on t2.folio =t1.producto 
+		INNER JOIN choferes t3 ON t3.idchofer = t1.idchofer
+		where t1.idcliente = '".$idcliente."' and date(t1.fecha) >= '".$fechainicial."' and date(t1.fecha) <= '".$fechafinal."' order by fecha DESC";
+		  
 		$consultad = $db->prepare($Query);  
 		$consultad->execute();
 		while($filau = $consultad->fetch()){
@@ -702,7 +711,7 @@ class Api{
 		$servicios = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.folio, t1.fechagenerado, t1.importe, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = '".$idcliente."' and date(t1.fechagenerado) >= '".$fechainicial."' and date(t1.fechagenerado) <= '".$fechafinal."'";
+		$Query = "SELECT t1.timbrado, t1.folio, t1.fechagenerado, t1.importe, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = '".$idcliente."' and date(t1.fechagenerado) >= '".$fechainicial."' and date(t1.fechagenerado) <= '".$fechafinal."' and t1.timbrado = '1' ";
 		 
 		$consultad = $db->prepare($Query);  
 		$consultad->execute();
@@ -856,8 +865,7 @@ class Api{
 	}
 
 
-	public function coordenadasEstaciones(){
-	 
+	public function coordenadasEstaciones(){ 
 		$servicios = array();
 		$dates = array();
 		$precios = array();
@@ -887,11 +895,17 @@ class Api{
 			//$fecha =$dates[0];
 			//echo $fecha;
 
-			$Q = "Select * from precio_prod where idestacionprod = '".$filau['idestacion']."' and fecha = (SELECT fecha from precio_prod where idestacionprod = '".$filau['idestacion']."' order by fecha DESC limit 1) group by idproduc";
-			//echo $Q."<br><br>";		
+			$Q = "Select t1.* from precio_prod t1
+			INNER JOIN estaciones_productos t2 ON t1.idproduc = t2.folioproduto
+			where t1.idestacionprod = '".$filau['idestacion']."' 
+			and t1.fecha = (SELECT fecha from precio_prod where idestacionprod = '".$filau['idestacion']."' order by fecha DESC limit 1) 
+			AND t2.idestacion = '".$filau['idestacion']."'
+			GROUP BY t2.folioproduto";
+ 
+
 			$consultax = $db->prepare($Q);  
 					$consultax->execute();
-					
+					 
 					while($filax = $consultax->fetch()){
 						$precios[$a] = $filax;
 						$a++;

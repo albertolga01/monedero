@@ -115,7 +115,7 @@ if (file_exists($strtimbrado)){
         $Query = "SELECT t1.folio, t3.placas, t3.noeconomico, t2.notarjeta
                 FROM servicios t1
                 INNER JOIN tarjetas t2
-                ON t1.tarjeta = t2.folio
+                ON t1.tarjeta = t2.notarjeta
                 INNER JOIN vehiculos t3
                 ON t2.folio = t3.idtarjeta
                 WHERE t1.folio = '{$folio}'
@@ -159,21 +159,82 @@ if (file_exists($strtimbrado)){
             );
         }
     }
+    $folperiodo = $Comprobante["Folio"];
+    $QueryPeriodo = "SELECT periodoi, periodof
+            FROM facturas
+            WHERE folio = '{$folperiodo}'";
+    $consultap = $db->prepare($QueryPeriodo);
+    $consultap->execute();
+    while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+        
+        $periodoi = $filap->periodoi;
+        $periodof = $filap->periodof;
+    }
+ 
+   
+    
+
+ 
+   
 
 
     $saldo = array();
     $cteRFC = $Comprobante['Receptor']['Rfc'];
-    $Query = "SELECT t1.idcliente,t1.contacto, SUM(t2.importedisponibleabono) AS saldodisponible
+    $Query = "SELECT t1.direccion, t1.idcliente,t1.contacto, t2.IDabono, t2.importedisponibleabono AS saldodisponible
             FROM clientes t1
             INNER JOIN abonos t2
             ON t1.idcliente = t2.IDclienteAbono
-            WHERE rfc = '{$cteRFC}'";
+            WHERE rfc = '{$cteRFC}'
+            and t2.importedisponibleabono > '0'
+            ";
     $consulta = $db->prepare($Query);
     $consulta->execute();
     while($filau = $consulta->fetch(PDO::FETCH_OBJ)){
+        $idabono = $filau->IDabono;
         $saldo["saldodisponible"] = $filau->saldodisponible;
         $contacto = $filau->contacto;
+        $direccion = $filau->direccion;
+        $idcliente = $filau->idcliente;
     }
+
+    $QuerySaldoA = "SELECT IFNULL(SUM(saldoalcorte), 0) AS saldoanterior 
+    FROM facturas WHERE idcliente = '".$idcliente."' 
+    AND folio < '{$folperiodo}' AND cancelado = '0' 
+    ORDER BY folio DESC LIMIT 1";
+    $consultap = $db->prepare($QuerySaldoA);
+    $consultap->execute();
+    while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+        
+        $saldoanterior = $filap->saldoanterior; 
+    }
+
+
+
+    $QueryPeriodo = "SELECT SUM(importeabono) AS pagos 
+    FROM abonos 
+    WHERE IDclienteAbono = '".$idcliente."' 
+    and quemado != 1 "; 
+    $consultap = $db->prepare($QueryPeriodo);
+    $consultap->execute();
+    while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+        
+        $pagos = $filap->pagos; 
+    }
+
+
+    //update saldo al corte
+    $quemarAbono = "UPDATE abonos set quemado = '1' WHERE IDabono = '".$idabono."'";
+    $consulta = $db->prepare($quemarAbono);
+    $consulta->execute();
+
+
+    //update saldo al corte
+    $updateSaldoCorte = "UPDATE facturas set saldoalcorte = '".$saldo["saldodisponible"]."' WHERE folio = '".$folperiodo."'";
+    $consulta = $db->prepare($updateSaldoCorte);
+    $consulta->execute();
+
+  
+                    
 
     $lts_magna = array("cantidad" => 0, "importe" => 0);
     $lts_premium = array("cantidad" => 0, "importe" => 0);
@@ -205,6 +266,16 @@ if (file_exists($strtimbrado)){
     // echo "<pre>";
     // print_r($Comprobante);
     // echo "</pre>";
+
+
+    foreach ($Comprobante['Complemento']['EstadoDeCuentaCombustible']['Conceptos'] as $producto){
+             
+            $t_total1 += ($producto["Importe"] + $producto["Traslados"]['Traslado']['Importe']);
+            //$i ++;
+         
+    }
+
+
 }
 $nombreC=$Comprobante["Receptor"]["Nombre"];
 echo'
@@ -414,9 +485,11 @@ echo'
             <div id="header2" style="width: 330px;">
                 <label><center>'.$Comprobante["Emisor"]["Nombre"].'</center></label>
                         <label><center>RFC:'.$Comprobante["Emisor"]["Rfc"].'</center></label>
-                        <label>Tipo de comprobante: '.$Comprobante["TipoDeComprobante"].'</label>
-                        <label>Lugar de Expedición: 82110</label>
-                        <label>Régimen Fiscal: 601 - General de Ley Personas Morales</label>
+                        <label><center>Dirección: AVENIDA CAMARON SABALO S/N</center></label>
+                        <label><center>COL. LOMAS DE MAZATLAN, MAZATLAN, SINALOA 82110</center></label> 
+                        <label><center>lacajamzt@grupopetromar.com 6699837071</center></label>
+                        <label><center>Régimen Fiscal: 601 - General de Ley Personas Morales</center></label>
+                       
             </div>
             
             <div id="header3">
@@ -463,7 +536,7 @@ echo'
                     </tr>
                     <tr>
                         <td>Domicilio:</td>
-                        <td></td>
+                        <td>'.$direccion.'</td>
                     </tr>
                 </table>
             </div>
@@ -472,27 +545,27 @@ echo'
                 <table id="saldos-tbl">
                     <tr>
                         <td class="fixed-td">PERIODO</td>
-                        <td id="h5-periodo"></td>
+                        <td id="h5-periodo" style="font-size:10px">'.$periodoi.' - '.$periodof.'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">SALDO ANTERIOR</td>
-                        <td id="h5-saldoanterior"></td>
+                        <td id="h5-saldoanterior" style="font-size:12px">'.$saldoanterior.'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">PAGOS</td>
-                        <td id="h5-pagos"></td>
+                        <td id="h5-pagos" style="font-size:12px">'.number_format($pagos, 2).'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">CARGAS</td>
-                        <td id="h5-cargas">'.$Comprobante["Total"].'</td>
+                        <td id="h5-cargas" style="font-size:12px">'.number_format($t_total1, 2).'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">SALDO AL CORTE</td>
-                        <td id="h5-saldocorte">'.$saldo["saldodisponible"].'</td>
+                        <td id="h5-saldocorte" style="font-size:12px">'.number_format($saldo["saldodisponible"], 2).'</td>
                     </tr>
-                    <tr>
+                    <tr hidden>
                         <td class="fixed-td">SALDO DISPONIBLE</td>
-                        <td id="h5-saldodisponible">'.$saldo["saldodisponible"].'</td>
+                        <td id="h5-saldodisponible" style="font-size:12px">'.number_format(($saldo["saldodisponible"] + $saldoanterior), 2).'</td>
                     </tr>
                 </table>
             </div>
@@ -507,7 +580,7 @@ echo'
                         <th class="dt1">IMPORTE</th>
                     </tr>
                     
-                    <tr class="detailtbl-productos">
+                    <tr class="detailtbl-productos" style="font-size: 10px;">
                         <td class="dt2"><label>1</label></td>
                         <td class="dt2"><label>E48 - Unidad de servicio</label></td>
                         <td class="dt2"><label>SIN COMISIÓN POR ESTRATEGIA COMERCIAL</label></td>
@@ -528,23 +601,23 @@ echo'
             
                 <div style="display: flex; flex-direction: column;">
                     <label style="color: #0082b7;"><b>Importe con letra:</b></label>
-                    <label style="display: inline-block; width: 520px;">'.$TotalLetra.'</label>
+                    <label style="display: inline-block; width: 520px; font-size:12px">'.$TotalLetra.'</label>
                 </div>
                 <table id="totales-tbl">
                         <tr>
                             <td class="fixed-td">SUBTOTAL</td>
-                            <td style="width: 55px; text-align: center;">$1.00</td>
+                            <td style="width: 55px; text-align: center;" style="font-size:12px">$1.00</td>
                         </tr>
                         
                             <tr>
                             <td class="fixed-td">IMPUESTOS</td>
-                            <td style="width: 55px; text-align: center;">$0.00</td>
+                            <td style="width: 55px; text-align: center;" style="font-size:12px">$0.00</td>
                             </tr>
                         
                         <tr>
                             
                             <td class="fixed-td">DESCUENTO</td>
-                                <td style="width: 55px; text-align: center;">$1.00</td>
+                                <td style="width: 55px; text-align: center;" style="font-size:12px">$1.00</td>
                         </tr>
                         <!--
                             <tr>
@@ -554,7 +627,7 @@ echo'
                         -->
                         <tr>
                             <td class="fixed-td">TOTAL</td>
-                            <td style="width: 55px; text-align: center;">$'.number_format($Comprobante["Total"], 2, '.', ',').'</td>
+                            <td style="width: 55px; text-align: center;" style="font-size:12px">$'.number_format($Comprobante["Total"], 2, '.', ',').'</td>
                         </tr>
                     </table>
 
@@ -601,7 +674,7 @@ echo'
                             if($estacion['claveestacion'] == $producto['ClaveEstacion']){
                                 
                                 echo '
-                                    <tr class="detailtbl-productos">
+                                    <tr class="detailtbl-productos" style="font-size: 10px;">
                                         <td class="dt2"><label>'.$producto["Identificador"].'</label></td>
                                         <td class="dt2"><label>'.$tarjetasDB[$i]->placas.'</label></td>
                                         <td class="dt2"><label>'.$tarjetasDB[$i]->noeconomico.'</label></td>
@@ -650,23 +723,23 @@ echo'
                         </tr>
                         <tr>
                             <td class="fixed-td">MAGNA</td>
-                            <td class="value-td">'.$lts_magna['cantidad'].'</td>
-                            <td class="value-td">'.$lts_magna['importe'].'</td>
+                            <td class="value-td" style="font-size:12px">'.$lts_magna['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px">'.($lts_magna['importe']*1.16).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">PREMIUM</td>
-                            <td class="value-td">'.$lts_premium['cantidad'].'</td>
-                            <td class="value-td">'.$lts_premium['importe'].'</td>
+                            <td class="value-td" style="font-size:12px">'.$lts_premium['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px">'.($lts_premium['importe']*1.16).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">DIESEL</td>
-                            <td class="value-td">'.$lts_diesel['cantidad'].'</td>
-                            <td class="value-td">'.$lts_diesel['importe'].'</td>
+                            <td class="value-td" style="font-size:12px">'.$lts_diesel['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px">'.($lts_diesel['importe']*1.16).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">TOTAL</td>
-                            <td class="value-td">'.($lts_magna['cantidad'] + $lts_premium['cantidad'] + $lts_diesel['cantidad']).'</td>
-                            <td class="value-td">'.($lts_magna['importe'] + $lts_premium['importe'] + $lts_diesel['importe']).'</td>
+                            <td class="value-td" style="font-size:12px">'.($lts_magna['cantidad'] + $lts_premium['cantidad'] + $lts_diesel['cantidad']).'</td>
+                            <td class="value-td" style="font-size:12px">'.(($lts_magna['importe'] + $lts_premium['importe'] + $lts_diesel['importe']) * 1.16).'</td>
                         </tr>
                     </table>
             </div>

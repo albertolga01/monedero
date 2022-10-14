@@ -20,6 +20,27 @@ if($method == "OPTIONS") {
 
 
 if($method == "GET"){
+ 
+
+    if($_GET["id"] == "getTarjetaFPlaca"){
+        $vector = array();
+        $api = new Api();
+        $idvehiculo = $_GET["idvehiculo"]; 
+        $vector = $api->getTarjetaFPlaca($idvehiculo);
+        $json = $vector;
+        echo json_encode($json);
+    }
+
+
+    if($_GET["id"] == "getPlacas"){
+        $vector = array();
+        $api = new Api();
+        $cte = $_GET["cte"]; 
+        $vector = $api->getPlacas($cte);
+        $json = $vector;
+        echo json_encode($json);
+    }
+
     
     if($_GET["id"] == "getPlacaFTarjeta"){
         $vector = array();
@@ -157,6 +178,13 @@ if($method == "GET"){
         $vector = array();
         $api = new Api();
         $vector = $api->getEstaciones($_GET['grupo']);
+        $json = json_encode($vector);
+        echo $json;
+    }
+    if($_GET["id"] == "getTodasEstaciones"){
+        $vector = array();
+        $api = new Api();
+        $vector = $api->getTodasEstaciones();
         $json = json_encode($vector);
         echo $json;
     }
@@ -721,8 +749,9 @@ if($method == "POST"){
         $idcliente = $_POST["idcliente"]; 
         $fechainicial = $_POST["fechainicial"];
         $fechafinal = $_POST["fechafinal"];
+        $idtarjeta = $_POST["idtarjeta"];
         $api = new Api();
-        $json = $api->obtenerServicios($idcliente, $fechainicial, $fechafinal);
+        $json = $api->obtenerServicios($idcliente, $fechainicial, $fechafinal, $idtarjeta);
         echo json_encode($json);
 
     }
@@ -749,8 +778,10 @@ if($method == "POST"){
         $idcliente = $_POST["idcliente"];
         $folio[] = $_POST["folio"];
         $fecha = $_POST["fecha"];   
+        $periodoi = $_POST["periodoi"];   
+        $periodof = $_POST["periodof"];   
         $api = new Api();
-        $json = $api->generarFactura($idcliente, $folio, $fecha);
+        $json = $api->generarFactura($idcliente, $folio, $fecha, $periodoi, $periodof);
         echo json_encode($json);
 
     }
@@ -856,6 +887,16 @@ if($method == "POST"){
         $json = null; 
         $api = new Api();
         $json = $api->lastCardNumber();
+        echo $json;
+
+    }
+    if($_POST["id"] == "actualizarNip"){
+
+        $json = null; 
+        $api = new Api();
+        $idchofer = $_POST["idchofer"];
+        $nip = $_POST["nip"];
+        $json = $api->actualizarNip($idchofer, $nip);
         echo $json;
 
     }
