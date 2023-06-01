@@ -27,7 +27,8 @@ $db = $conexion->getConexion();
 
 $foliopagoaplicacion = $_POST['foliopagoaplicacion'];
 
-$Q = "Select t1.folio_p,t1.idfactura, t1.foliopago, t1.importe, t1.abono, t2.uuidfactura, t2.folio as foliofactura, t3.fecha, t3.importeabono, t4.rzonsocial, t4.rfc from pagosaplicaciones t1 
+$Q = "Select t4.nombre as nombreReceptor, t2.importe as importeDR, t4.regfiscalrec, t4.domfiscalrec, t1.folio_p,t1.idfactura, t1.foliopago, t1.importe, t1.abono, t2.uuidfactura, t2.folio as foliofactura, t3.fecha, t3.importeabono, t4.rzonsocial, t4.rfc 
+from pagosaplicaciones t1 
 inner join facturas t2 on t1.idfactura  = t2.folio 
 inner join abonos t3 on t1.foliopago = t3.IDabono
 inner join clientes t4 on t2.idcliente = t4.idcliente
@@ -39,13 +40,19 @@ $consultad = $db->prepare($Q);
 			$aplicaciones[] = $filau;
             $foliofactura = $filau["foliofactura"];
             $iddocumento = $filau["uuidfactura"];
-            $importepago = $filau["importeabono"];
+            //
+            $importepago = $filau["abono"];
+           // $importepago = $filau["importeabono"];
             $fechapago = $filau["fecha"]; 
             $saldoanterior = $filau["importe"];///////////
             $saldoinsoluto = $filau["abono"];///////////
             $rfc = $filau["rfc"];
-            $rzonsiocialreceptor = $filau["rzonsocial"];
+            $rzonsiocialreceptor = $filau["nombreReceptor"];
             $folio = $filau["folio_p"];
+            $DomicilioReceptor = $filau["domfiscalrec"];
+            $RegimenReceptor = $filau["regfiscalrec"];
+            $importeDR = $filau["importeDR"];
+            
 		}
 
 
@@ -57,9 +64,25 @@ $noparcialidad = 1;
 
  //cambiar por rfc de la caja
  //por confirmar
+
+
+ //obtener datos del emisor 
+ $QueryEmisor = "Select rfcemisor, nombreemisor, regimenfiscalemisor, codigopostal from datosfacturacion limit 1";
+// echo $Q;
+$consultae = $db->prepare($QueryEmisor);
+		$consultae->execute();
+		while($filae = $consultae->fetch()){
+            $rfcemisor = $filae["rfcemisor"];
+            $nombreemisor = $filae["nombreemisor"];
+            $regimenfiscalemisor = $filae["regimenfiscalemisor"];
+            $codigopostal = $filae["codigopostal"];
+        }
+
+        $baseDR = ($importeDR / 1.16);
+
 $json = '
 {
-    "Version": "3.3",
+    "Version": "4.0",
     "Serie": "C",
     "Folio": "'.$folio.'",
     "Fecha": "'.date('Y-m-d\TH:i:s', strtotime(date('Y-m-d\TH:i:s').'-7 hour')).'",
@@ -67,19 +90,22 @@ $json = '
     "Moneda": "XXX",
     "Total": "0",
     "TipoDeComprobante": "P",
-    "LugarExpedicion": "82110",
+    "LugarExpedicion": "'.$codigopostal.'",
     "NoCertificado": "",
     "Certificado": "",
     "Sello": "",
+    "Exportacion": "01",
     "Emisor": {
-       "Rfc": "OSE060323UN7", 
-       "RegimenFiscal": "601", 
-       "Nombre": "OPERADORA Y SERVICIOS EMPRESARIALES SA DE CV"
+       "Rfc": "'.$rfcemisor.'", 
+       "RegimenFiscal": "'.$regimenfiscalemisor.'", 
+       "Nombre": "'.$nombreemisor.'"
     },
     "Receptor": {
        "Rfc": "'.$rfc.'",
        "Nombre": "'.$rzonsiocialreceptor.'",
-       "UsoCFDI": "P01"
+       "UsoCFDI": "CP01",
+       "DomicilioFiscalReceptor": "'.$DomicilioReceptor.'",
+       "RegimenFiscalReceptor": "'.$RegimenReceptor.'"
     },
     "Conceptos": [
         {
@@ -88,18 +114,26 @@ $json = '
           "ClaveUnidad": "ACT",
           "Descripcion": "Pago",
           "ValorUnitario": "0",
-          "Importe": "0"
+          "Importe": "0",
+          "ObjetoImp": "01"
         }
     ],
-    "Complemento": [
+    "Complemento": 
         {
             "Any": [
                 {
-                    "Pago10:Pagos": {
+                    "Pago20:Pagos": {
+                        "Version": "2.0",
+                        "Totales": {
+                        "MontoTotalPagos": "'.round($importepago,2).'", 
+                        "TotalTrasladosBaseIVA16": "'.round($baseDR, 2).'",
+                        "TotalTrasladosImpuestoIVA16": "'.round(($baseDR * 0.16),2).'", 
+                    }, 
                         "Pago": [{
                            "FechaPago": "'.$fechapago.'",
                            "FormaDePagoP": "03",
                            "MonedaP": "MXN",
+                           "TipoCambioP": "1",
                            "Monto": "'.round($importepago,2).'",
                            "DoctoRelacionado": [{
                               "IdDocumento": "'.$iddocumento.'",
@@ -109,14 +143,44 @@ $json = '
                               "NumParcialidad": "'.$noparcialidad.'",
                               "ImpSaldoAnt": "'.round($saldoanterior,2).'", 
                               "ImpPagado": "'.round($importepago,2).'",
-                              "ImpSaldoInsoluto": "'.round($saldoanterior-$importepago,2).'"
-                           }]
+                              "ImpSaldoInsoluto": "'.round($saldoanterior-$importepago,2).'",
+                              "ObjetoImpDR": "02",
+                              "EquivalenciaDR": "1",
+                              "ImpuestosDR": 
+                                                {
+                                                    "TrasladosDR":[
+                                                        {
+                                                            
+                                                                "BaseDR": "'.round($baseDR, 2).'",
+                                                                "ImpuestoDR": "002",
+                                                                "TipoFactorDR": "Tasa",
+                                                                "TasaOCuotaDR": "0.160000",
+                                                                "ImporteDR": "'.round(($baseDR * 0.16),2).'"
+                                                             
+                                                        }
+                                                    ]
+                                                }
+                           }],
+                           "ImpuestosP": 
+                           {
+                               "TrasladosP":[
+                                   {
+                                       
+                                           "BaseP": "'.round($baseDR, 2).'",
+                                           "ImpuestoP": "002",
+                                           "TipoFactorP": "Tasa",
+                                           "TasaOCuotaP": "0.160000",
+                                           "ImporteP": "'.round(($baseDR * 0.16),2).'"
+                                           
+                                   }
+                               ]
+                           }
                         }]
                      }
                 }
             ]
         }
-    ]
+    
  }
 '; 
 //echo $json;

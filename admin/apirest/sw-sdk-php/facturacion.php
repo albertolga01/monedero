@@ -25,9 +25,9 @@ $conexion = new Conexion();
 $db = $conexion->getConexion();
 $rows = array();
 $servicios = array();
-
+ 
 foreach ($idFacturas as $iterated) {
-    $Query = "SELECT t1.folio, t1.idcliente, t1.fechagenerado, t1.importe, t1.restante, t1.cantidad,
+    $Query = "SELECT t2.domfiscalrec, t2.regfiscalrec, t2.usocfdi, t1.folio, t1.idcliente, t1.fechagenerado, t1.importe, t1.restante, t1.cantidad,
                 t2.tipocliente, t2.nombre, t2.rfc, t2.direccion, t3.*
                 FROM facturas t1 
                 INNER JOIN clientes t2
@@ -35,6 +35,7 @@ foreach ($idFacturas as $iterated) {
                 INNER JOIN datosfacturacion t3
                 ON t3.foliodatos='1'
                 WHERE folio = '{$iterated}'";
+               // echo $Query; 
     $consulta = $db->prepare($Query);
     $consulta->execute();
     while($filau = $consulta->fetch(PDO::FETCH_OBJ)){
@@ -64,20 +65,26 @@ $consulta = $db->prepare($Query1);
         $productos[] = $filau;
     }
 
-
+     
 foreach ($rows as $factura) {
+    
+    
     $toSend = formatData($factura, $servicios, $productos);
     $responseTimbrado = swTimbrado($toSend, $factura->rfc, $factura->folio);
-}
+}     
 
 function formatData($factura, $servicios, $productos){
+
+   
+
+
     $totalImpuestos = 0; 
     $ClaveProdServ="0";
     $producto="0";
     $codigo="0";
     $sumaSubTotal = 0;
     $sumaTotal = 0;
-    $cfdi["Version"] = "3.3";// CAMBIAR A 4
+    $cfdi["Version"] = "4.0";// CAMBIAR A 4
     $cfdi["Serie"] = "FC";
     $cfdi["Impuestos"] = null;
     $cfdi["Folio"] = $factura->folio;
@@ -100,10 +107,10 @@ function formatData($factura, $servicios, $productos){
         $cfdi["Receptor"]["Rfc"] = $factura->rfc;
         $cfdi["Receptor"]["Nombre"] = $factura->nombre;
         $cfdi["Receptor"]["ResidenciaFiscalSpecified"] = false;
-        $cfdi["Receptor"]["DomicilioFiscalReceptor"] = "82110";       //CAMPO 4.0
-        $cfdi["Receptor"]["RegimenFiscalReceptor"] = "601";                     //CAMPO 4.0
+        $cfdi["Receptor"]["DomicilioFiscalReceptor"] = $factura->domfiscalrec;       //CAMPO 4.0
+        $cfdi["Receptor"]["RegimenFiscalReceptor"] = $factura->regfiscalrec;                     //CAMPO 4.0
         $cfdi["Receptor"]["NumRegIdTrib"] = null;
-        $cfdi["Receptor"]["UsoCFDI"] = "G03"; 
+        $cfdi["Receptor"]["UsoCFDI"] = $factura->usocfdi; //4.0
         $conceptos = array();
 
         foreach($servicios as $iterated){
@@ -122,14 +129,14 @@ function formatData($factura, $servicios, $productos){
             $concepto["Cantidad"] = 1;
             $concepto["ClaveUnidad"] = "E48";
             $concepto["Unidad"] = "Unidad de servicio"; 
-            $concepto["Descripcion"] = "SIN COMISIÓN POR ESTRATEGIA COMERCIAL";
+            $concepto["Descripcion"] = "COMISION POR ESTRATEGIA COMERCIAL, EN CUMPLIMIENTO DE LA FRACCION III DE LA REGLA 3.3.1.10";
            // $concepto["ValorUnitario"] = number_format(($iterated->importe / $iterated->litros), 2);
             $concepto["ValorUnitario"] = number_format(1, 2);
             $concepto["Importe"] = number_format(1, 2);
             $sumaTotal = 1;
             $concepto["Descuento"] = number_format(1, 2); 
 
-            // $concepto["ObjetoImp"] = "02";      //CAMPO 4.0
+             $concepto["ObjetoImp"] = "01";      //CAMPO 4.0
                 
             $trasladitosC["Base"] = number_format($importe, 2);
             $trasladitosC["Importe"] = number_format(($importe*0.16), 2);
@@ -209,7 +216,7 @@ function formatData($factura, $servicios, $productos){
             $concepto1["ValorUnitario"] = "" .round($punitariofinal, 2); //number_format($uni, 2);
             $concepto1["Importe"] = "" .round(($importefinal), 2);
             $subT += round($importefinal, 2);
-           // $concepto1["ObjetoImp"] = "01";     //CAMPO 4.0
+           // $concepto1["ObjetoImp"] = "02";     //CAMPO 4.0
             
            // $trasladitos["Base"] = number_format(($iterated->importe / 1.16), 2);
             //$base = (($iterated->preciounitario * $iepsm) / 1.16) * $iterated->litros;
@@ -240,24 +247,25 @@ function formatData($factura, $servicios, $productos){
         
         $edoCombutibleBody["Conceptos"] = $conceptos1;
 
-        $estadodecombustible["Ecc12:Estadodecuentacombustible"] = $edoCombutibleBody;
+        $estadodecombustible["ecc12:EstadoDeCuentaCombustible"] = $edoCombutibleBody;
         $complementos["Any"][0] = $estadodecombustible;
         
        // $cfdi["Impuestos"] = null;
-        $cfdi["Complemento"][0] = $complementos;
+        $cfdi["Complemento"] = $complementos;
         $cfdi["SubTotal"] = "1.00";//number_format($sumaSubTotal,2); //number_format(($factura->importe * 0.84), 2);//number_format(20.68, 2);//number_format($factura->importe, 2);
         $cfdi["Descuento"] = "1.00";
         $cfdi["Moneda"] = "MXN";
-        $cfdi["TipoCambio"] = "1";
+        $cfdi["TipoCambio"] = "1";  
+      //  $cfdi["ObjetoImp"] = "02";
         $cfdi["Total"] = "0.00";//number_format($sumaTotal,2); //number_format($factura->importe, 2);
         
         // DATA TO JSON AND RESPONSE FROM LIBRARY
     $json_string = json_encode($cfdi, JSON_PRETTY_PRINT);
     
         
- //  echo $json_string;
+  //echo $json_string;
         $toSend = json_encode($cfdi);
-        //echo $toSend;
+      //  echo $toSend;
     return $toSend;
 }
 

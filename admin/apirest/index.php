@@ -490,6 +490,7 @@ if($method == "POST"){
     }
 
     if($_POST["id"] == "serviciomanual"){
+        if($tarjeta != "null"){
         $json = null;
         $tarjeta = $_POST["tarjeta"]; 
         $cliente = $_POST["cliente"]; 
@@ -504,6 +505,9 @@ if($method == "POST"){
         $api = new Api();
         $json = $api->serviciomanual($tarjeta,$cliente,$estacion,$importe,$producto,$litros,$precio,$km,$servicio,$chofer);
         echo json_encode($json);
+        }else{
+            echo "Error";
+        }
     }
 
     if($_POST["id"] == "agregarCliente"){
@@ -531,8 +535,11 @@ if($method == "POST"){
         $estado = $_POST["estado"];
         $ciudad = $_POST["ciudad"];
         $cp = $_POST["cp"];
+        $usocdfi = $_POST["usocdfi"];
+        $domfiscal = $_POST["domfiscal"];
+        $regfiscalrec = $_POST["regfiscalrec"];
         $api = new Api();
-        $json = $api->addCliente($repre,$cabono,$ccargo,$nombre, $rfc, $grupo, $contacto, $telefono, $direccion,  $colonia, $estado, $ciudad, $cp,$tipo,$periodopago, $limitecredito);
+        $json = $api->addCliente($repre,$cabono,$ccargo,$nombre, $rfc, $grupo, $contacto, $telefono, $direccion,  $colonia, $estado, $ciudad, $cp,$tipo,$periodopago, $limitecredito, $usocdfi, $domfiscal, $regfiscalrec);
         echo $json;
     }
     if($_POST["id"] == "EditarCliente"){

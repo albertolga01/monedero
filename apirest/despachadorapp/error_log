@@ -611,3 +611,12 @@ Stack trace:
 [29-Aug-2022 16:48:30 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
 [29-Aug-2022 16:56:35 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
 [29-Aug-2022 17:00:44 UTC] PHP Warning:  Division by zero in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 440
+[08-Mar-2023 17:02:20 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 445
+[08-Mar-2023 17:02:20 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 483
+[08-Mar-2023 17:02:20 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 539
+[08-Mar-2023 17:05:14 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 445
+[08-Mar-2023 17:05:14 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 483
+[08-Mar-2023 17:05:14 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 539
+[08-Mar-2023 17:09:26 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 445
+[08-Mar-2023 17:09:26 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 483
+[08-Mar-2023 17:09:26 UTC] PHP Warning:  A non-numeric value encountered in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/apirest/despachadorapp/api.php on line 539

@@ -65,3 +65,83 @@ Stack trace:
 [29-Sep-2022 16:21:40 UTC] PHP Parse error:  syntax error, unexpected '103315' (T_LNUMBER) in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 19
 [29-Sep-2022 16:21:45 UTC] PHP Parse error:  syntax error, unexpected '103315' (T_LNUMBER) in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 19
 [29-Sep-2022 16:21:46 UTC] PHP Parse error:  syntax error, unexpected '103315' (T_LNUMBER) in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 19
+[30-May-2023 16:15:20 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:15:21 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:03 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:03 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:04 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:04 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:05 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:16:05 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:17:24 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16
+[30-May-2023 16:17:42 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16
+[30-May-2023 16:21:10 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16
+[30-May-2023 16:26:33 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16
+[30-May-2023 16:32:03 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:32:35 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/json.php on line 16
+[30-May-2023 16:42:53 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16
+[30-May-2023 17:16:17 UTC] PHP Fatal error:  Uncaught Error: Unsupported operand types in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php:16
+Stack trace:
+#0 /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php(13): generarBitacora()
+#1 {main}
+  thrown in /home/jkmpg7ol/public_html/monedero.grupopetromar.com/jsonbitacora.php on line 16

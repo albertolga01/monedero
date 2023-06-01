@@ -65,19 +65,34 @@ $consulta = $db->prepare($Query1);
     }
 
 
+    
+
+
 foreach ($rows as $factura) {
     $toSend = formatData($factura, $servicios, $productos);
     $responseTimbrado = swTimbrado($toSend, $factura->rfc, $factura->folio);
 }
 
 function formatData($factura, $servicios, $productos){
+
+
+    $QueryDatosCte = "SELECT domfiscalrec, regfiscalrec, usocfdi FROM clientes where rfc = '".$factura->rfc."'";
+$consulta = $db->prepare($QueryDatosCte);
+    $consulta->execute();
+    while($datoscte = $consulta->fetch(PDO::FETCH_OBJ)){
+        $domfiscalrec = $datoscte["domfiscalrec"];
+        $regfiscalrec = $datoscte["regfiscalrec"];
+        $usocfdi = $datoscte["usocfdi"];
+    }
+
+
     $totalImpuestos = 0; 
     $ClaveProdServ="0";
     $producto="0";
     $codigo="0";
     $sumaSubTotal = 0;
     $sumaTotal = 0;
-    $cfdi["Version"] = "3.3";// CAMBIAR A 4
+    $cfdi["Version"] = "4.0";
     $cfdi["Serie"] = "FC";
     $cfdi["Impuestos"] = null;
     $cfdi["Folio"] = $factura->folio;
@@ -100,10 +115,10 @@ function formatData($factura, $servicios, $productos){
         $cfdi["Receptor"]["Rfc"] = $factura->rfc;
         $cfdi["Receptor"]["Nombre"] = $factura->nombre;
         $cfdi["Receptor"]["ResidenciaFiscalSpecified"] = false;
-        $cfdi["Receptor"]["DomicilioFiscalReceptor"] = "82110";       //CAMPO 4.0
-        $cfdi["Receptor"]["RegimenFiscalReceptor"] = "601";                     //CAMPO 4.0
+        $cfdi["Receptor"]["DomicilioFiscalReceptor"] = $domfiscalrec;       //CAMPO 4.0
+        $cfdi["Receptor"]["RegimenFiscalReceptor"] = $regfiscalrec;                     //CAMPO 4.0
         $cfdi["Receptor"]["NumRegIdTrib"] = null;
-        $cfdi["Receptor"]["UsoCFDI"] = "P01"; 
+        $cfdi["Receptor"]["UsoCFDI"] = $usocfdi; //4.0
         $conceptos = array();
 
         foreach($servicios as $iterated){
@@ -129,7 +144,7 @@ function formatData($factura, $servicios, $productos){
             $sumaTotal = 1;
             $concepto["Descuento"] = number_format(1, 2); 
 
-            // $concepto["ObjetoImp"] = "02";      //CAMPO 4.0
+             //$concepto["ObjetoImp"] = "02";      //CAMPO 4.0
                 
             $trasladitosC["Base"] = number_format($importe, 2);
             $trasladitosC["Importe"] = number_format(($importe*0.16), 2);
@@ -229,6 +244,7 @@ function formatData($factura, $servicios, $productos){
         $cfdi["Descuento"] = "1.00";
         $cfdi["Moneda"] = "MXN";
         $cfdi["TipoCambio"] = "1";
+        $cfdi["ObjetoImp"] = "01"
         $cfdi["Total"] = "0.00";//number_format($sumaTotal,2); //number_format($factura->importe, 2);
         
         // DATA TO JSON AND RESPONSE FROM LIBRARY
@@ -237,6 +253,7 @@ function formatData($factura, $servicios, $productos){
         
     //echo $json_string;
         $toSend = json_encode($cfdi);
+        print_r($toSend);
     return $toSend;
 }
 

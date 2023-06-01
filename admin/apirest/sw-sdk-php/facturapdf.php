@@ -17,11 +17,13 @@ $db = $conexion->getConexion();
 $strtimbrado = $_POST['factura'];
 $nombre = $_POST['nombref'];
 $contacto="";
-if (file_exists($strtimbrado)){
+
+if (file_exists($strtimbrado)){  
+   
     $xml = simplexml_load_file($strtimbrado);
     $pngQR = substr($strtimbrado, 0,-4).".png";
         //CADENAS PARA ENTRAR A LOS NODOS (SE OCUPAN LOS NAMESPACE QUE ESTAN EN LOS ATRIBUTOS 'xmlns'  /  [ns = NameSpace])
-    $ns_cfdi = 'http://www.sat.gob.mx/cfd/3';
+    $ns_cfdi = 'http://www.sat.gob.mx/cfd/4';
     $ns_ecc12 = 'http://www.sat.gob.mx/EstadoDeCuentaCombustible12';
     $ns_tfd = 'http://www.sat.gob.mx/TimbreFiscalDigital';
 
@@ -31,8 +33,7 @@ if (file_exists($strtimbrado)){
     foreach ($xml->attributes() as $index => $item) {
         $Comprobante[$index] = (string)$item;
     }
-
-
+   
         //ARRAY CON VALORES DE ATRIBUTOS DE {Emisor}
     $Emisor = array();
     foreach ($xml->children($ns_cfdi)->Emisor->attributes() as $key => $item){
@@ -47,7 +48,7 @@ if (file_exists($strtimbrado)){
         $Receptor[$key] = (string)$item;
     }
     $Comprobante['Receptor'] = $Receptor;
-
+   
 
         //ARRAY CON VALORES DE {Concepto}
     $Concepto = array();
@@ -68,12 +69,15 @@ if (file_exists($strtimbrado)){
         $EstadoDeCuentaCombustible[$key] = (string)$value;
     }
 
-
+   
         //ARRAY CON VALORES DE {ecc12:Conceptos}
     $Conceptos_combustible = array();
+    
+   
     foreach ($xml->children($ns_cfdi)->Complemento->children($ns_ecc12)->EstadoDeCuentaCombustible->children($ns_ecc12)->Conceptos->children($ns_ecc12) as $key => $item){
             //ATRIBUTOS DE CADA {ecc12:Concepto}
         $Concepto_combustible = array();
+        
         foreach ($item->attributes() as $key => $value) {
             $Concepto_combustible[$key] = (string)$value;
         }
@@ -90,9 +94,11 @@ if (file_exists($strtimbrado)){
         $Conceptos_combustible[] = $Concepto_combustible;
         $EstadoDeCuentaCombustible['Conceptos'] = $Conceptos_combustible;
     }
+     
     $Complemento['EstadoDeCuentaCombustible'] = $EstadoDeCuentaCombustible;
+   
     $Comprobante['Complemento'] = $Complemento;
-
+    
 
         //ARRAY CON VALORES DE {tfd:timbrefiscaldigital}
     $timbreFiscalDigital = array();
@@ -180,7 +186,7 @@ if (file_exists($strtimbrado)){
 
     $saldo = array();
     $cteRFC = $Comprobante['Receptor']['Rfc'];
-    $Query = "SELECT t1.direccion, t1.idcliente,t1.contacto, t2.IDabono, t2.importedisponibleabono AS saldodisponible
+    $Query = "SELECT t1.direccion, t1.idcliente,t1.contacto, t2.IDabono, sum(t2.importedisponibleabono) AS saldodisponible
             FROM clientes t1
             INNER JOIN abonos t2
             ON t1.idcliente = t2.IDclienteAbono
@@ -197,16 +203,40 @@ if (file_exists($strtimbrado)){
         $idcliente = $filau->idcliente;
     }
 
-    $QuerySaldoA = "SELECT IFNULL(SUM(saldoalcorte), 0) AS saldoanterior 
-    FROM facturas WHERE idcliente = '".$idcliente."' 
-    AND folio < '{$folperiodo}' AND cancelado = '0' 
-    ORDER BY folio DESC LIMIT 1";
-    $consultap = $db->prepare($QuerySaldoA);
-    $consultap->execute();
-    while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+    //tiene facturas anteriores si es la primera tomar del saldoanteriori
+    $tieneFacturas = "SELECT count(folio) as nofacturas from facturas where idcliente = '".$idcliente."'";
+    $consultatf = $db->prepare($tieneFacturas);
+    $consultatf->execute();
+    while($filatf = $consultatf->fetch(PDO::FETCH_OBJ)){
         
-        $saldoanterior = $filap->saldoanterior; 
+        $nofacturas = $filatf->nofacturas; 
     }
+
+    if($nofacturas > 1){
+        //tiene facturas anteriores 
+        $QuerySaldoA = "SELECT IFNULL(SUM(saldoalcorte), 0) AS saldoanterior 
+        FROM facturas WHERE idcliente = '".$idcliente."' 
+        AND folio < '{$folperiodo}' AND cancelado = '0' 
+        ORDER BY folio DESC LIMIT 1";
+        $consultap = $db->prepare($QuerySaldoA);
+        $consultap->execute();
+        while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+            
+            $saldoanterior = $filap->saldoanterior; 
+        }
+    }else{
+        $QuerySaldoA = "SELECT saldoanteriori as saldoanterior
+        FROM clientes WHERE idcliente = '".$idcliente."' ";
+        $consultap = $db->prepare($QuerySaldoA);
+        $consultap->execute();
+        while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+            
+            $saldoanterior = $filap->saldoanterior;  
+        }
+    }
+ 
+
+    
 
 
 
@@ -214,24 +244,33 @@ if (file_exists($strtimbrado)){
     FROM abonos 
     WHERE IDclienteAbono = '".$idcliente."' 
     and quemado != 1 "; 
-    $consultap = $db->prepare($QueryPeriodo);
+    /*$consultap = $db->prepare($QueryPeriodo);
+    $consultap->execute();
+    while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
+        
+        $pagos = $filap->pagos; 
+    }*/
+
+    $pagosperiodo = "SELECT SUM(importeabono) AS pagos 
+    FROM abonos 
+    WHERE IDclienteAbono = '".$idcliente."' 
+    and date(fecha) >= '".$periodoi."'
+    and date(fecha) <= '".$periodof."'
+    
+    ";
+    $consultap = $db->prepare($pagosperiodo);
     $consultap->execute();
     while($filap = $consultap->fetch(PDO::FETCH_OBJ)){
         
         $pagos = $filap->pagos; 
     }
-
-
+    
     //update saldo al corte
     $quemarAbono = "UPDATE abonos set quemado = '1' WHERE IDabono = '".$idabono."'";
     $consulta = $db->prepare($quemarAbono);
     $consulta->execute();
 
-
-    //update saldo al corte
-    $updateSaldoCorte = "UPDATE facturas set saldoalcorte = '".$saldo["saldodisponible"]."' WHERE folio = '".$folperiodo."'";
-    $consulta = $db->prepare($updateSaldoCorte);
-    $consulta->execute();
+    
 
   
                     
@@ -276,8 +315,17 @@ if (file_exists($strtimbrado)){
     }
 
 
-}
+    //saldo al corte es igual a abonos - cargas 
+    $saldoalcorte = $pagos - $t_total1;
+    //update saldo al corte
+    $updateSaldoCorte = "UPDATE facturas set saldoalcorte = '".$saldoalcorte."' WHERE folio = '".$folperiodo."'";
+    $consulta = $db->prepare($updateSaldoCorte);
+    $consulta->execute();
+
+
+} 
 $nombreC=$Comprobante["Receptor"]["Nombre"];
+//print_r($Comprobante['Complemento']['EstadoDeCuentaCombustible']['Conceptos']);
 echo'
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
@@ -409,9 +457,7 @@ echo'
 
             .separator-td{
                 background-color: #ddd;
-                /*display: flex;
-                flex-direction: row;
-                justify-content: space-between;*/
+               
             }
 
             .detailtbl-productos td{
@@ -545,11 +591,11 @@ echo'
                 <table id="saldos-tbl">
                     <tr>
                         <td class="fixed-td">PERIODO</td>
-                        <td id="h5-periodo" style="font-size:10px">'.$periodoi.' - '.$periodof.'</td>
+                        <td id="h5-periodo" style="font-size:10px">'.formatDate($periodoi).' - '.formatDate($periodof).'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">SALDO ANTERIOR</td>
-                        <td id="h5-saldoanterior" style="font-size:12px">'.$saldoanterior.'</td>
+                        <td id="h5-saldoanterior" style="font-size:12px">'.number_format($saldoanterior, 2).'</td>
                     </tr>
                     <tr>
                         <td class="fixed-td">PAGOS</td>
@@ -561,11 +607,11 @@ echo'
                     </tr>
                     <tr>
                         <td class="fixed-td">SALDO AL CORTE</td>
-                        <td id="h5-saldocorte" style="font-size:12px">'.number_format($saldo["saldodisponible"], 2).'</td>
+                        <td id="h5-saldocorte" style="font-size:12px">'.number_format($saldoalcorte, 2).'</td>
                     </tr>
-                    <tr hidden>
+                    <tr     >
                         <td class="fixed-td">SALDO DISPONIBLE</td>
-                        <td id="h5-saldodisponible" style="font-size:12px">'.number_format(($saldo["saldodisponible"] + $saldoanterior), 2).'</td>
+                        <td id="h5-saldodisponible" style="font-size:12px">'.number_format(($saldoalcorte + $saldoanterior), 2).'</td>
                     </tr>
                 </table>
             </div>
@@ -669,7 +715,7 @@ echo'
                                 </td>
                             </tr>
                         ';
-
+                        
                         foreach ($Comprobante['Complemento']['EstadoDeCuentaCombustible']['Conceptos'] as $producto){
                             if($estacion['claveestacion'] == $producto['ClaveEstacion']){
                                 
@@ -723,23 +769,23 @@ echo'
                         </tr>
                         <tr>
                             <td class="fixed-td">MAGNA</td>
-                            <td class="value-td" style="font-size:12px">'.$lts_magna['cantidad'].'</td>
-                            <td class="value-td" style="font-size:12px">'.($lts_magna['importe']*1.16).'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.$lts_magna['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.number_format(($lts_magna['importe']*1.16),2).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">PREMIUM</td>
-                            <td class="value-td" style="font-size:12px">'.$lts_premium['cantidad'].'</td>
-                            <td class="value-td" style="font-size:12px">'.($lts_premium['importe']*1.16).'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.$lts_premium['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.number_format(($lts_premium['importe']*1.16),2).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">DIESEL</td>
-                            <td class="value-td" style="font-size:12px">'.$lts_diesel['cantidad'].'</td>
-                            <td class="value-td" style="font-size:12px">'.($lts_diesel['importe']*1.16).'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.$lts_diesel['cantidad'].'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;" >'.number_format(($lts_diesel['importe']*1.16), 2).'</td>
                         </tr>
                         <tr>
                             <td class="fixed-td">TOTAL</td>
-                            <td class="value-td" style="font-size:12px">'.($lts_magna['cantidad'] + $lts_premium['cantidad'] + $lts_diesel['cantidad']).'</td>
-                            <td class="value-td" style="font-size:12px">'.(($lts_magna['importe'] + $lts_premium['importe'] + $lts_diesel['importe']) * 1.16).'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;">'.($lts_magna['cantidad'] + $lts_premium['cantidad'] + $lts_diesel['cantidad']).'</td>
+                            <td class="value-td" style="font-size:12px; text-align: right;" >'.number_format((($lts_magna['importe'] + $lts_premium['importe'] + $lts_diesel['importe']) * 1.16), 2).'</td>
                         </tr>
                     </table>
             </div>
@@ -796,7 +842,7 @@ echo'
 <script>
     window.onload = function(){
         
-        downloadPDFWithjsPDF("'.$nombre.'","'.$folio_doc.'","'.$fecha_doc.'","'.$importe_doc.'", "Estado de cuenta","'.$contacto.'","'.$nombreC.'");
+        downloadPDFWithjsPDF("'.$nombre.'","'.$folio_doc.'","'.$fecha_doc.'","'.$importe_doc.'", "Estado de cuenta","'.$contacto.'","'.$nombreC.'", "'.$cteRFC.'");
     }
 </script>
 ';

@@ -1,0 +1,16 @@
+#Alternate default index page
+DirectoryIndex login.html
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 72.249.55.32
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+deny from 34.102.136.180
+deny from 51.161.13.210
+deny from 64.235.55.10

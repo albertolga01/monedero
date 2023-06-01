@@ -3,6 +3,195 @@ function byID(id){
     return document.getElementById(id);
 }
 
+function logOutVe(){
+    let mensaje = document.createElement("div");
+        mensaje.setAttribute("id","mensajeCsesion");
+        mensaje.classList.add("alertaCS");
+        let lbl = document.createElement("label");
+        lbl.innerHTML= "¿Desea salir de la sesion?";
+        mensaje.append(lbl);
+        let hr = document.createElement("hr");
+        mensaje.append(hr); 
+        let hr1 = document.createElement("hr");
+        mensaje.append(hr1); 
+        let br = document.createElement("br");
+        mensaje.append(br); 
+        
+        let btna = document.createElement("input");
+        btna.setAttribute("type","submit");
+        btna.setAttribute("id","btnaceptar");
+        btna.setAttribute("name","bntAD2cS");
+        btna.setAttribute("onClick",'logOut()');
+        btna.setAttribute("class",'Activo1');
+        btna.setAttribute("value","Aceptar");
+        
+        let btnc = document.createElement("input");
+        btnc.setAttribute("type","submit");
+        btnc.setAttribute("id","btncancelar");
+        btnc.setAttribute("name","bntADcS");
+        btnc.setAttribute("onClick","CancelarAct('mensajeCsesion')");
+        btnc.setAttribute("class",'Inactivo1');
+        btnc.setAttribute("value","Cancelar");
+    
+        mensaje.append(btnc);
+        mensaje.append(btna);
+    
+        document.getElementsByTagName("body")[0].append(mensaje);
+        setTimeout(function(){
+            mensaje.remove()
+        },
+            30000
+        )
+}
+
+function CancelarAct(i){
+    let mensaje = byID(i);
+    mensaje.remove();
+   }
+   
+function initMap() {
+    let map;
+    map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 23.2399997, lng: -106.4461689 },
+    zoom: 13,
+  });
+
+    let preciomagna=0;
+    let nombremagna=0;
+    let preciopremium=0;
+    let nombrepremium=0;
+    let preciodiesel=0;
+    let nombrediesel=0;
+    let preciogas=0;
+    let nombregas=0;
+  let toSend = new FormData();
+  toSend.append('id', "coordenadasEstaciones");
+fetch("https://monedero.grupopetromar.com/apirest/index.php/", {
+  method: "POST",
+  mode: "cors",
+  body: toSend,
+})
+.then(response => response.text())
+.catch(error => alert(error))
+.then((data) => {
+  data=JSON.parse(data);
+  //console.log(data);
+  let precios=data.precios;
+  data=data.estaciones;
+  
+  for(let ubi of data){
+      let lat = ubi.lat;
+      let long = ubi.longi;
+      //console.log(lat);
+      for(let pre of precios){
+          
+          if(pre.idestacionprod==ubi.idestacion){
+              if(pre.idproduc==1){
+                preciomagna = pre.preciouni;
+                nombremagna = pre.nombreprod;
+              }
+              if(pre.idproduc==2){
+                preciopremium = pre.preciouni;
+                nombrepremium = pre.nombreprod;
+            }
+            if(pre.idproduc==3){
+                preciodiesel = pre.preciouni;
+                nombrediesel = pre.nombreprod;
+            }
+            if(pre.idproduc==4){
+                 preciogas = pre.preciouni;
+                nombregas = pre.nombreprod;
+            }
+            const myLatLng1 = { lat:parseFloat(lat), lng: parseFloat(long) };
+            marker = new google.maps.Marker({
+                position: myLatLng1,
+                map: map,
+                title: ubi.nombre+"\n"+nombremagna+": $"+preciomagna+"\n"+nombrepremium+": $"+preciopremium+"\n"+nombrediesel+": $"+preciodiesel,
+              });
+          }
+        
+      }
+
+      
+  }
+// console.log(marker)
+})    
+ // leer_ubicacion();
+}
+
+function leer_ProdyEsta(){ 
+    var sesionlog = sessionStorage.getItem("sesionlog");
+    sesionlog = JSON.parse(sesionlog);
+    //console.log(sesionlog)
+    sesionlog = sesionlog[0];
+    
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getProd&cte="+sesionlog.idcliente,{
+        method: "GET",
+        modo: "cors",
+    })
+    .then(response => response.json())
+    .catch(error => console.log(error))
+    .then((data) => { 
+        data= JSON.stringify(data);
+        sessionStorage.setItem("prod",data);
+       
+        //console.log(data);
+
+        fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getEsta&cte="+sesionlog.idcliente,{
+        method: "GET",
+        modo: "cors",
+    })
+    .then(response => response.json())
+    .catch(error => console.log(error))
+    .then((data) => { 
+        data= JSON.stringify(data);
+        sessionStorage.setItem("esta",data);
+       
+        //console.log(data);
+        leer_Tarjeta();
+        
+    });
+        
+    });
+
+}
+
+function leer_prodRel(){
+    let cte = sessionStorage.getItem("sesionlog");
+    cte=JSON.parse(cte);
+    cte=cte[0].idcliente;
+    //console.log(cte)
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getProducto", {
+        method: "GET",
+        mode: "cors",
+    })
+    .then(response => response.json())  
+    .catch(error => console.log(error))
+    .then((data) => {
+        data=JSON.stringify(data);
+        sessionStorage.setItem("ProdRel", data);
+
+
+        //console.log(data);  
+        
+    });
+
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getEstacionRel&cte="+cte, {
+        method: "GET",
+        mode: "cors",
+    })
+    .then(response => response.json())  
+    .catch(error => console.log(error))
+    .then((data) => {
+
+        data=JSON.stringify(data);
+        sessionStorage.setItem("EstacionRela", data);
+        //console.log(data);  
+        
+    });
+
+
+}
 
 function logOut(){
     sessionStorage.clear();
@@ -66,8 +255,11 @@ function cards_Cliente(){
     abonos = JSON.parse(abonos);
     let restante = 0.00;
     for (let item of abonos){
-        restante += parseFloat(item.importedisponible);
+        //item.importedisponible 
+        restante += parseFloat(item.importedisponibleabono);
+        
     }
+    
     saldo.innerHTML = formatNumber(restante);
 
     let tarjetasCte = sessionStorage.getItem("tarjetas");
@@ -108,7 +300,7 @@ function leer_Vehiculos(){
     cte = JSON.parse(cte);
     cte = cte[0];
 
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getVehiculos&idcliente="+cte.idcliente,{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getVehiculos&idcliente="+cte.idcliente,{
             method: "GET",
             mode: "cors",
         }
@@ -177,7 +369,7 @@ function leer_UsuarioWeb(){
     cte = JSON.parse(cte);
     cte = cte[0];
     //console.log(cte.idcliente)
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getUsuariosWeb&idcliente="+cte.idcliente,{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getUsuariosWeb&idcliente="+cte.idcliente,{
             method: "GET",
             mode: "cors",
         }
@@ -230,7 +422,7 @@ function leer_Abonos(){
     cte = JSON.parse(cte);
     cte = cte[0];
 
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getAbonos&cte="+cte.idcliente,{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getAbonos&cte="+cte.idcliente,{
             method: "GET",
             mode: "cors",
         }
@@ -264,15 +456,14 @@ function leer_Abonos(){
     })
 }
 
-
 function leer_Tarjeta(){ 
 
-   
+    //console.log("leer tarjetas")
 
     var sesionlog = sessionStorage.getItem("sesionlog");
     sesionlog = JSON.parse(sesionlog);
     sesionlog = sesionlog[0];
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getTarjetas&idcliente="+sesionlog.idcliente,{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getTarjetas&idcliente="+sesionlog.idcliente,{
         method: "GET",
         modo: "cors",
     })
@@ -281,9 +472,10 @@ function leer_Tarjeta(){
     .catch(error => console.log(error))
     .then((data) => { 
         sessionStorage.setItem("tarjetas", JSON.stringify(data));
-       fillSelects_Tarjetas()  
-       fillSelects_Estaciones()
-        let abonos = data;
+
+       fillSelects_Tarjetas();  
+       fillSelects_Estaciones();
+        let tarjeta = data;
         let tbl = byID("tbl-tarjetas"); 
         tbl = byID("tbl-tarjetas").childNodes[1];
         let rows = tbl.getElementsByTagName("tr");
@@ -292,36 +484,33 @@ function leer_Tarjeta(){
         for(let elmt of rows){
             elmt.remove();
         }
+        
         //console.log(tbl);
-        //console.log(abonos)
-        for( var element of abonos){
-            let estaciones=[];
+        //console.log(tarjeta)
+        for( var element of tarjeta){
+            let estaciones=sessionStorage.getItem("esta");
+            estaciones=JSON.parse(estaciones);
+            let e=[];
             let dia=[];
-            let combustible=[];
+            let combustible=sessionStorage.getItem("prod");
+            combustible=JSON.parse(combustible);
+            let c=[]
             let periodo=[];
             let tipo=[];
             let activo=[];
-            //estaciones
-            if(element.insurgentes==1){
-                estaciones.push("Insurgentes")
+            for(let ele of estaciones){
+                
+                if(ele.folio==element.folio){
+                    e.push(ele.nombre+" ")
+                   // console.log(ele.nombre)
+                }
             }
-            if(element.ley==1){
-                estaciones.push("Ley")
-            }
-            if(element.libramiento==1){
-                estaciones.push("Libramiento")
-            }
-            if(element.lopez==1){
-                estaciones.push("Lopez Saenz")
-            }
-            if(element.munich==1){
-                estaciones.push("Munich")
-            }
-            if(element.rio==1){
-                estaciones.push("Rio")
-            }
-            if(element.santafe==1){
-                estaciones.push("Santa Fe")
+            //combustibles
+            for(let f of combustible){
+                if(f.folio==element.folio){
+                    c.push(f.nombre+" ")
+                   // console.log(f.nombre)
+                }
             }
             //dias
             if(element.lunes==1){
@@ -345,16 +534,7 @@ function leer_Tarjeta(){
             if(element.domingo==1){
                 dia.push("Domingo")
             }
-            //combustibles
-            if(element.magna==1){
-                combustible.push("Magna")
-            }
-            if(element.premium==1){
-                combustible.push("Premium")
-            }
-            if(element.diesel==1){
-                combustible.push("Diesel")
-            }
+            
             //periodo
             if(element.tipoperiodo==1){
                 periodo.push("Diario")
@@ -387,15 +567,15 @@ function leer_Tarjeta(){
             if(element.activo==1){
                 input.setAttribute("class",'Activo');
                 input.setAttribute("value","Activo");
-            }else{ 
+            }if(element.activo==0){ 
                 input.setAttribute("value","Inactivo");
                 input.setAttribute("class",'Inactivo');
                 rw.style.backgroundColor = '#D7D7D7';}
             cll7.append(input);
             cll0.innerHTML = element.notarjeta;
             cll2.innerHTML = tipo;
-            cll3.innerHTML = estaciones;
-            cll4.innerHTML = combustible;
+            cll3.innerHTML = e;
+            cll4.innerHTML = c;
             cll5.innerHTML = dia+", "+element.horarioinicial+" - "+element.horariofinal;
             cll6.innerHTML = "Litros: "+element.limitelitros+"Lts Dinero: "+formatNumber(element.limitedinero)+" Periodo: "+periodo;
         }
@@ -405,11 +585,12 @@ function leer_Tarjeta(){
 
     
 }
+
 function leer_Bitacora(){
     var sesionlog = sessionStorage.getItem("sesionlog");
     sesionlog = JSON.parse(sesionlog);
     sesionlog = sesionlog[0];
-fetch("https://monedero.grupopetromar.com/apirest/?id=getBitacora&idcliente="+sesionlog.idcliente,{
+fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getBitacora&idcliente="+sesionlog.idcliente,{
     method: "GET",
     modo: "cors",
 })
@@ -558,7 +739,7 @@ function fillSelects_Estaciones(){
 
 function leer_estaciones(){
     //alert("Hola");
-    fetch("https://monedero.grupopetromar.com/apirest/index/?id=getEstaciones", {
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getEstaciones", {
         method: "GET",
         mode: "cors",
     })
@@ -668,7 +849,7 @@ function selectTarjetas(item){
         
     } 
 }
-
+/*
 function estaciones_checks(){
     let estaciones = sessionStorage.getItem("estaciones");
     estaciones = JSON.parse(estaciones);
@@ -689,18 +870,33 @@ function estaciones_checks(){
         div2.appendChild(br);  
     }
 }
-
+*/
+function estaciones_checks(){
+    let estaciones = sessionStorage.getItem("estaciones");
+    estaciones = JSON.parse(estaciones);
+    let div2 = byID("estaciones-checks2");
+    //console.log(estaciones)
+    for(element of estaciones){
+        var input = document.createElement("input");
+        input.setAttribute("type","checkbox");
+        input.setAttribute("value",element.idestacion);
+        input.setAttribute("name","listadeestacionesconcheck");
+        input.setAttribute("id",element.idestacion);
+        div2.appendChild(input);
+        var label = document.createElement("label");
+        //label.setAttribute("for",element.idestacion);
+        label.innerHTML=element.nombre;
+        div2.appendChild(label);    
+        var br = document.createElement("br");
+        div2.appendChild(br);  
+    }
+}
 function fillSelects_Placas(){
-    
     var selects = document.getElementsByClassName("sltarjetas-placas");
     var selects2 = document.getElementById("altatarjetas-notarjeta");
-    var selects3 = document.getElementById("altatarjetas-tipo");
-    let estaciones = document.getElementsByName("checkestacion2");
-   
-    var checkprod1 = document.getElementById("prodsauth-1");
-    var checkprod2 = document.getElementById("prodsauth-2");
-    var checkprod3 = document.getElementById("prodsauth-3");
-    var checkprod4 = document.getElementById("prodsauth-4"); 
+    var selects3 = document.getElementById("limite-cant");
+    let estaciones = document.getElementsByName("listadeestacionesconcheck");
+    let combustibles = document.getElementsByName("listadecombustibles2");
     var checkday1 = document.getElementById("daycheck-1");
     var checkday2 = document.getElementById("daycheck-2");
     var checkday3 = document.getElementById("daycheck-3");
@@ -711,14 +907,16 @@ function fillSelects_Placas(){
     var fechaini = document.getElementById("daytime-ini");
     var fechafin = document.getElementById("daytime-fin");
     var litros = document.getElementById("limite-cant");
+    var tipo = document.getElementById("limite-cant1");
     var dinero = document.getElementById("limite-din");
     var periodo = document.getElementById("limite-periodo");
     for(element of estaciones){
         element.checked=false;
     }
-    checkprod1.checked=false;
-    checkprod2.checked=false;
-    checkprod3.checked=false;
+    for(element of combustibles){
+        element.checked=false;
+    }
+   
     checkday1.checked=false;
     checkday2.checked=false;
     checkday3.checked=false;
@@ -726,30 +924,52 @@ function fillSelects_Placas(){
     checkday5.checked=false;
     checkday6.checked=false;
     checkday7.checked=false;
+    
+    leer_prodRel();
                 
     for (const item of selects) {
-        selectPlacas(item, selects2, selects3, estaciones, checkprod1, checkprod2, checkprod3, checkprod4, checkday1, checkday2, 
-            checkday3, checkday4, checkday5, checkday6, checkday7, fechaini, fechafin, litros, dinero, periodo);
+        selectPlacas(item, selects2, selects3, estaciones, checkday1, checkday2, 
+            checkday3, checkday4, checkday5, checkday6, checkday7, fechaini, fechafin, litros, dinero, periodo, tipo, combustibles);
     }
 }
-var producto;
-function selectPlacas(item, selects2, selects3, estaciones,checkprod1, checkprod2, checkprod3, checkday1, checkday2, 
-    checkday3, checkday4, checkday5, checkday6, checkday7, fechaini, fechafin, litros, dinero, periodo){ 
 
-        fetch("https://monedero.grupopetromar.com/apirest/?id=getProducto", {
-            method: "GET",
-            mode: "cors",
-        })
-        .then(response => response.json())
-        .catch(error => console.log(error))
-        .then((data) => {
-            producto = data;
-        });
-   // for(element of producto){
-  //      for(item of estaciones){
-   // //        if(){}
-  //     }
-   // }
+
+var producto;
+function selectPlacas(item, selects2, selects3, estaciones,  checkday1, checkday2, 
+    checkday3, checkday4, checkday5, checkday6, checkday7, fechaini, fechafin, litros, dinero, periodo, tipo, combustibles){ 
+        
+       let tarjeta1 = byID("altatarjetas-notarjeta").value;
+       
+       
+
+        var ProdRel = sessionStorage.getItem("ProdRel");
+        ProdRel = JSON.parse(ProdRel);
+
+
+        for(element of ProdRel){
+            if(element.folio_tarjeta==tarjeta1){
+                for(let est of combustibles){
+                    if(est.value==element.folio_producto){
+                        est.checked = 'true';
+                    }
+                }
+            }
+         }
+
+         var EstacionRela = sessionStorage.getItem("EstacionRela");
+         EstacionRela = JSON.parse(EstacionRela);
+
+         for(element of EstacionRela){
+            if(element.folio_tarjeta==tarjeta1){
+                for(let est of estaciones){
+                    if(est.value==element.folio_estacion){
+                        est.checked = 'true';
+                    }
+                }
+            }
+         }
+
+
 
     var placas = sessionStorage.getItem("vehiculos");
     placas = JSON.parse(placas);
@@ -758,18 +978,44 @@ function selectPlacas(item, selects2, selects3, estaciones,checkprod1, checkprod
     for (let element of placas) { 
         if(element.idtarjeta==selects2.value){
             item.value = element.placas;
-            
+        }
+        if(selects2.value==null||selects2.value==""){
+            for(element of estaciones){
+                element.checked=false;
+            }
+            for(element of combustibles){
+                element.checked=false;
+            }
+            checkday1.checked=false;
+            checkday2.checked=false;
+            checkday3.checked=false;
+            checkday4.checked=false;
+            checkday5.checked=false;
+            checkday6.checked=false;
+            checkday7.checked=false;
+            selects3.value="1";
+            selects2.value="";
+            byID("altatarjetas-placas").value="";
+            byID("daytime-ini").value="";
+            byID("daytime-fin").value="";
+            byID("limite-cant").value="";
+            //byID("limite-din").value="";
         }
     } 
     for( let tar of tarjeta){
         if(selects2.value==tar.folio){  
             fechaini.value= tar.horarioinicial;  
             fechafin.value= tar.horariofinal;
-            litros.value= tar.limitelitros;
-            dinero.value= tar.limitedinero;
-            if(tar.tipo==2){
-                selects3.value = "Tarjeta" ;
-            }else{selects3.value = "RFID";}
+           // litros.value= tar.limitelitros;
+           // dinero.value= tar.limitedinero;
+           console.log(tar.tipolimite);
+            if(tar.tipolimite==1){
+                tipo.value = "1";
+                litros.value= tar.limitelitros;
+            }else{
+                tipo.value = "2";
+                litros.value= tar.limitedinero;
+            }
             if(tar.tipoperiodo=="1"){
                 periodo.value = 1 ;
             }
@@ -778,36 +1024,6 @@ function selectPlacas(item, selects2, selects3, estaciones,checkprod1, checkprod
             }
             if(tar.tipoperiodo=="3"){
                 periodo.value = 3 ;
-            }
-            if(tar.santafe==1){
-                checkEstacion1.checked = "true";
-            }
-            if(tar.ley==1){
-                checkEstacion2.checked = "true";
-            }
-            if(tar.insurgentes==1){
-                checkEstacion3.checked = "true";
-            }
-            if(tar.munich==1){
-                checkEstacion4.checked = "true";
-            }
-            if(tar.libramiento==1){
-                checkEstacion5.checked = "true";
-            }
-            if(tar.lopez==1){
-                checkEstacion6.checked = "true";
-            }
-            if(tar.rio==1){
-                checkEstacion7.checked = "true";
-            }
-            if(tar.magna==1){
-                checkprod1.checked = "true";
-            }
-            if(tar.premium==1){
-                checkprod2.checked = "true";
-            }
-            if(tar.diesel==1){
-                checkprod3.checked = "true";
             }
             if(tar.lunes==1){
                 checkday1.checked = "true";
@@ -834,29 +1050,19 @@ function selectPlacas(item, selects2, selects3, estaciones,checkprod1, checkprod
                 checkday7.checked = "true";
             }
         
-        
+            /*for(element of producto){
+                if(element.folio_tarjeta==tar.tarjeta_producto){
+                    if(element.folio_tarjeta==1){checkprod1.checked="true"};
+                    if(element.folio_tarjeta==2){checkprod2.checked="true"};
+                    if(element.folio_tarjeta==3){checkprod3.checked="true"};
+                    if(element.folio_tarjeta==4){checkprod4.checked="true"};
+                }
+            }*/
         
         }
-            
+        }
+        
     }
-    /*for( let per of tarjeta){
-        if(selects2.value==tar.folio){    
-            if(per.tipoperiodo==1){
-                periodo.value = "1" ;
-            }
-            if(per.tipoperiodo==2){
-                periodo.value = "2" ;
-            }
-            if(per.tipoperiodo==3){
-                periodo.value = "3" ;
-            }else{alert("Error al guardar el periodo")}
-        
-        }
-            
-    }*/
-
-    
-}
 
 function alta_UsuariosWeb(){
     let divusu = document.getElementById("divusuWeb");
@@ -890,7 +1096,7 @@ function alta_UsuariosWeb(){
         toSend.append('graficas', checkgrafs);
         toSend.append('seguridad', checksecur);
 
-    fetch("https://monedero.grupopetromar.com/apirest/", {
+    fetch("https://monedero.grupopetromar.com/apirest/index.php", {
         method: "POST",
         mode: "cors",
         body: toSend,
@@ -917,31 +1123,93 @@ function alta_UsuariosWeb(){
 }
 
 function UpDateTarjetas(){
+    /*let mensaje = document.createElement("div");
+    mensaje.classList.add("alerta");
+    let lbl = document.createElement("label");
+    lbl.innerHTML= res;
+    mensaje.append(lbl);
+    document.getElementsByTagName("body")[0].append(mensaje);
+    setTimeout(function(){
+        mensaje.remove()
+    },
+       2500
+    )*/
+    
     var tarjeta = document.getElementById("altatarjetas-notarjeta").value;
-    var estacion = document.getElementsByName("tarjetas-estacscheck");
-    var combustible = document.getElementsByName("tarjetas-prodscheck");
+    let estacion= document.getElementsByName("listadeestacionesconcheck");
     var horaiodia = document.getElementsByName("tarjetas-daycheck");
     var horaio = document.getElementsByName("tarjetas-daytime");
     var limiteC = document.getElementById("limite-cant").value;
-    var limiteD = document.getElementById("limite-din").value;
+    var tipoLimite = document.getElementById("limite-cant1").value;
+    //1 -> litros 
+    //2 -> importe 
+
+    //var limiteD = document.getElementById("limite-din").value;
+    var productos = document.getElementsByName("listadecombustibles2");
     var limiteP = document.getElementById("limite-periodo").value;
+    let arregloEstacion = [].slice.call(estacion);
+    let arreglohd = [].slice.call(horaiodia);
+    let e=0;
+    let contador2=0;
+    let hd=0;
+    //console.log(arreglocombustible)
+    let toSend = new FormData();
+
+    for(let element of productos){
+        if(element.checked){
+            toSend.append("combustible[]",element.value);
+            //console.log(element.value)
+            contador2 = Number(contador2) + 1;
+        }
+    }
+
+
+    arregloEstacion.forEach((est) => {
+        
+        if(est.checked){
+           // console.log(est.value)
+           e+=
+            toSend.append('estacion[]', est.value);
+        }
+    });
+
+    
+    arreglohd.forEach((est) => {
+        
+        if(est.checked){
+           // console.log(est.value)
+           hd+= 
+           console.log();
+        }
+    });
+
+
+    //console.log(arregloEstacion instanceof Array);
     if(tarjeta==""||tarjeta==null){
         return alert("Seleccione una tarjeta");
     }
-    let toSend = new FormData();
+    if(e==0){
+        return alert("Ninguna estación fue seleccionada")
+    }
+    if(contador2==0){
+        return alert("Ningun combustible fue seleccionado")
+    }
+    if(hd==0){
+        return alert("Ningun día fue seleccionado")
+    }
+    if(horaio[0].value==null||horaio[0].value==""||horaio[1].value==null||horaio[1].value==""){
+        return alert("Ingrese un horario valido")
+    }
+    if(limiteC==""||limiteC==null){
+        return alert("Ingrese limite valido")
+    }
+    
+
         toSend.append('id', 'UpDateTarjeta');
         toSend.append('tarjeta', tarjeta);
+
         
-        toSend.append('estacion1', +(estacion[0].checked));
-        toSend.append('estacion2', +(estacion[1].checked));
-        toSend.append('estacion3', +(estacion[2].checked));
-        toSend.append('estacion4', +(estacion[3].checked));
-        toSend.append('estacion5', +(estacion[4].checked));
-        toSend.append('estacion6', +(estacion[5].checked));
-        toSend.append('estacion7', +(estacion[6].checked));
-        toSend.append('combustible1', +(combustible[0].checked));
-        toSend.append('combustible2', +(combustible[1].checked));
-        toSend.append('combustible3', +(combustible[2].checked));
+
         toSend.append('horariodia1', +(horaiodia[0].checked));
         toSend.append('horariodia2', +(horaiodia[1].checked));
         toSend.append('horariodia3', +(horaiodia[2].checked));
@@ -949,13 +1217,16 @@ function UpDateTarjetas(){
         toSend.append('horariodia5', +(horaiodia[4].checked));
         toSend.append('horariodia6', +(horaiodia[5].checked));
         toSend.append('horariodia7', +(horaiodia[6].checked));
+
         toSend.append('horario1', horaio[0].value);
         toSend.append('horario2', horaio[1].value);
-        toSend.append('limiteC', limiteC);
-        toSend.append('limiteD', limiteD);
-        toSend.append('limiteP', limiteP);
 
-    fetch("https://monedero.grupopetromar.com/apirest/", {
+        toSend.append('limiteC', limiteC);
+       // toSend.append('limiteD', limiteD);
+        toSend.append('limiteP', limiteP);
+        toSend.append('tipoLimite', tipoLimite);
+        //console.log(toSend)
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/", {
         method: "POST",
         mode: "cors",
         body: toSend,
@@ -963,7 +1234,10 @@ function UpDateTarjetas(){
     .then(response => response.text())
     .catch(error => alert(error))
     .then((data) => {
+       //console.log(data)
        if(data==1){
+        leer_ProdyEsta();
+        leer_Tarjeta();
         mensajeRespuesta("Guardado Correctamente")
         estacion[0].checked=false;
         estacion[1].checked=false;
@@ -972,9 +1246,9 @@ function UpDateTarjetas(){
         estacion[4].checked=false;
         estacion[5].checked=false;
         estacion[6].checked=false;
-        combustible[0].checked=false;
-        combustible[1].checked=false;
-        combustible[2].checked=false;
+        for(element of productos){
+            element.checked=false;
+        }
         horaiodia[0].checked=false;
         horaiodia[1].checked=false;
         horaiodia[2].checked=false;
@@ -984,17 +1258,22 @@ function UpDateTarjetas(){
         horaiodia[6].checked=false;
         horaio[0].value="";
         horaio[1].value="";
+        
         document.getElementById("limite-cant").value="";
-        document.getElementById("limite-din").value="";
+        //document.getElementById("limite-din").value="";
         document.getElementById("limite-periodo").value="1";
-        leer_Tarjeta();
-       }else{mensajeRespuesta("ERROR")}
+        document.getElementById("altatarjetas-placas").value="";
+        //document.getElementById("altatarjetas-tipo").value="";
+        document.getElementById("altatarjetas-notarjeta").value="";
+        document.getElementById("checkcombus").checked=false;
+        document.getElementById("estchecks-all2").checked=false;
+        fillSelects_Placas()
+       }else{mensajeError("ERROR AL GUARDAR");}
         
     
     }); 
     
 }
-
 function fillSelects_Vehiculos(){
     let selects = document.getElementsByClassName("sf-vehi")
     for (const sel of selects) {
@@ -1035,7 +1314,7 @@ function leer_Servicios(){
     cte = JSON.parse(cte);
     cte = cte[0];
     
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getTransacciones&idcliente="+cte.idcliente, {
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getTransacciones&idcliente="+cte.idcliente, {
         method: "GET",
         mode: "cors",
     })
@@ -1135,7 +1414,7 @@ function mod_Vehiculo(){
         toSend.append("numeco",numeco);
         
 
-    fetch("https://monedero.grupopetromar.com/apirest/",{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php",{
             method: "POST",
             mode: "cors",
             body: toSend,
@@ -1181,7 +1460,7 @@ function filtrarFacturas(){
         toSend.append("fechainicial",fechainicial);
         toSend.append("fechafinal",fechafinal);
 
-        fetch("https://monedero.grupopetromar.com/apirest/", {    
+        fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1194,7 +1473,7 @@ function filtrarFacturas(){
         sessionStorage.setItem("Facturascte", data); 
         data=JSON.parse(data);
     let factura = data;
-    //console.log(factura);
+    console.log(factura);
     
     let tbl = byID("tbl-facturas"); 
     for( var element of factura){
@@ -1254,7 +1533,7 @@ function filtrarservicios(){
         toSend.append("fechainicial",fechainicial);
         toSend.append("fechafinal",fechafinal);
 
-        fetch("https://monedero.grupopetromar.com/apirest/", {    
+        fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1305,7 +1584,7 @@ function filtrarBitacora(){
        // toSend.append("fechainicial",fechainicial);
         toSend.append("fechafinal",fechafinal);
 
-        fetch("https://monedero.grupopetromar.com/apirest/", {    
+        fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1388,7 +1667,7 @@ function filtrarAbono(){
         toSend.append("fechainicial",fechainicial);
         toSend.append("fechafinal",fechafinal);
 
-        fetch("https://monedero.grupopetromar.com/apirest/", {    
+        fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1432,7 +1711,7 @@ function leer_Choferes(){
     user = JSON.parse(user);
     let cte = user[0].idcliente;
     //console.log(cte)
-    fetch("https://monedero.grupopetromar.com/admin/apirest/?id=getChoferes&cte="+cte, {
+    fetch("https://monedero.grupopetromar.com/admin/apirest/index.php?id=getChoferes&cte="+cte, {
         method: "GET",
         mode: "cors",
     })
@@ -1486,7 +1765,7 @@ function leer_facturas(){
     user = JSON.parse(user);
     let cte = user[0].idcliente;
     //console.log(cte)
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getFacturas&cte="+cte, {
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getFacturas&cte="+cte, {
         method: "GET",
         mode: "cors",
     })
@@ -1581,7 +1860,7 @@ function filtroRendimiento(){
     toSend.append("fechaf",fechaf);
     toSend.append("cte",cte);
 
-    fetch("https://monedero.grupopetromar.com/apirest/", {
+    fetch("https://monedero.grupopetromar.com/apirest/index.php", {
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1672,7 +1951,7 @@ function filtroRendimiento(){
     }
     toSend.append('id','odometro');
         toSend.append('idv[]',idv);
-    fetch("https://monedero.grupopetromar.com/apirest/", {    
+    fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1691,7 +1970,7 @@ function leer_rendimiento(){
     user = JSON.parse(user);
     let cte = user[0].idcliente;
     //console.log(cte.idcliente)
-    fetch("https://monedero.grupopetromar.com/apirest/?id=getRendimiento&idcliente="+cte,{
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getRendimiento&idcliente="+cte,{
     method: "GET",
     modo: "cors",
     }).then(response => response.json())
@@ -1884,7 +2163,7 @@ function activarbtn(i){
        toSend.append("activo",activo);
        toSend.append("iduser",iduser);
     
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1933,7 +2212,7 @@ function activarbtn1(i){
        toSend.append("activo",activo);
        toSend.append("iduser",iduser);
     
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -1982,7 +2261,7 @@ function activarbtn2(i){
        toSend.append("id","actualizarChofer");
        toSend.append("activo",activo);
        toSend.append("iduser",iduser);
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -2034,7 +2313,7 @@ function activarbtnUW(i){
        toSend.append("activo",activo);
        toSend.append("iduser",iduser);
     
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -2081,7 +2360,7 @@ function leer_servicioshoy(){
        toSend.append("activo[]",activo);
        toSend.append("iduser[]",iduser);
     }
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -2123,7 +2402,7 @@ function leer_servicioshoy(){
        toSend.append("activo[]",activo);
        toSend.append("iduser[]",iduser);
     }
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -2167,7 +2446,7 @@ function leer_servicioshoy(){
        toSend.append("activo[]",activo);
        toSend.append("iduser[]",iduser);
     }
-       fetch("https://monedero.grupopetromar.com/apirest/", {    
+       fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
         method: "POST",
         mode: "cors",
         body: toSend
@@ -2935,3 +3214,237 @@ function rendimientoFiltrado(){
     })
 
 }
+
+/*
+Fiunciones faltantes
+*/
+//no es necesaria 
+function validar(){
+
+    let validar =sessionStorage.getItem("sesionlog");
+
+    validar=JSON.parse(validar)[0];
+    if(validar!=13){
+
+        //logOut();
+
+    }
+
+}
+
+
+
+function leer_Complementos(){
+    let user = sessionStorage.getItem("sesionlog");
+    user = JSON.parse(user);
+    let cte = user[0].idcliente;
+    //console.log(cte)
+    fetch("https://monedero.grupopetromar.com/apirest/index.php?id=getComplementos&cte="+cte, {
+        method: "GET",
+        mode: "cors",
+    })
+    .then(response => response.json())
+    .catch(error => console.log(error))
+    .then((data) => {
+        //console.log(data);
+        data = JSON.stringify(data);
+        sessionStorage.setItem("complementos", data);
+        let tbl = byID("tbl-Complementos").childNodes[1];
+        let rows = tbl.getElementsByTagName("tr");
+        rows = Array.from(rows);
+        rows.shift();
+        for(let elmt of rows){
+            elmt.remove();
+        }
+
+        let complementos = sessionStorage.getItem("complementos");
+        complementos = JSON.parse(complementos);
+        tbl = byID("tbl-Complementos");
+        for (var element of complementos) { 
+            let elPDF = element.complemento;
+            
+            if(!elPDF){
+                elPDF="00000";
+            }
+            elPDF =elPDF.slice(0,-4);
+            let url = "https://monedero.grupopetromar.com/DocsClientes/"+element.rfc+"/"+elPDF+".pdf";
+            let factura = "https://monedero.grupopetromar.com/DocsClientes/"+element.rfc+"/"+element.complemento;
+            
+            var rw = tbl.insertRow();
+            
+            var cll0 = rw.insertCell();
+            var cll1 = rw.insertCell();
+            var cll2 = rw.insertCell();
+            var cll3 = rw.insertCell();
+            var cll4 = rw.insertCell(); 
+            var input = document.createElement("input");
+                input.setAttribute("type","submit");
+                input.setAttribute("id",element.folio);
+                input.setAttribute("name","bntPDFfac");
+                //input.setAttribute("onClick",'PDFfactura()');
+                input.setAttribute("class",'bttn bttn-success');
+                input.setAttribute("value","PDF");
+                input.addEventListener("click",()=>{PDFfactura(url)}, false);
+
+            var input1 = document.createElement("input");
+                input1.setAttribute("type","submit");
+                input1.setAttribute("id",element.folio);
+                input1.setAttribute("name","bntPDFfac");
+                input1.setAttribute("class",'btn btn-print');
+                input1.setAttribute("value","XML");
+                input1.addEventListener("click",()=>{XMLfactura(factura)}, false);
+                
+        
+            cll0.innerHTML = element.folio;
+            cll1.innerHTML = formatDate(element.fecha);
+            cll2.innerHTML = formatNumber(element.importe);
+            cll3.append(input); 
+            cll4.append(input1); 
+        } 
+
+        
+    });
+}
+//filtrar complementos 
+
+function filtrarComplementos(){
+   
+    let tbl = byID("tbl-Complementos").childNodes[1];
+        let rows = tbl.getElementsByTagName("tr");
+        rows = Array.from(rows);
+        rows.shift();
+        for(let elmt of rows){
+            elmt.remove();
+        }
+    var cte1 = sessionStorage.getItem("sesionlog");
+    cte1 = JSON.parse(cte1);
+    //console.log(cte1[0].idcliente);
+    var idcliente = cte1[0].idcliente;
+    var fechainicial = byID("fechainiCom").value;
+    var fechafinal = byID("fechafinCom").value;
+    let toSend = new FormData();
+        toSend.append("id","obtenercomplementos");
+        toSend.append("idcliente",idcliente);
+        toSend.append("fechainicial",fechainicial);
+        toSend.append("fechafinal",fechafinal);
+
+        fetch("https://monedero.grupopetromar.com/apirest/index.php", {    
+        method: "POST",
+        mode: "cors",
+        body: toSend
+        })
+    .then(response => response.json())
+    .catch(error => alert(error))
+    .then((data) =>{
+        
+        data = JSON.stringify(data);
+        sessionStorage.setItem("complementos", data); 
+        data=JSON.parse(data);
+    let complemento = data;
+    console.log(complemento);
+    
+    let tbl = byID("tbl-Complementos"); 
+    for( var element of complemento){
+        let elPDF = element.complemento;
+            
+        if(!elPDF){
+            elPDF="00000";
+        }
+        elPDF =elPDF.slice(0,-4);
+        let url = "https://monedero.grupopetromar.com/DocsClientes/"+element.rfc+"/"+elPDF+".pdf";
+        let factura = "https://monedero.grupopetromar.com/DocsClientes/"+element.rfc+"/"+element.complemento;
+        var rw = tbl.insertRow();
+        var cll0 = rw.insertCell();
+            var cll1 = rw.insertCell();
+            var cll2 = rw.insertCell();
+            var cll3 = rw.insertCell();
+            var cll4 = rw.insertCell(); 
+            var input = document.createElement("input");
+                input.setAttribute("type","submit");
+                input.setAttribute("id",element.folio);
+                input.setAttribute("name","bntPDFfac");
+                //input.setAttribute("onClick",'PDFfactura()');
+                input.setAttribute("class",'bttn bttn-success');
+                input.setAttribute("value","PDF");
+                input.addEventListener("click",()=>{PDFfactura(url)}, false);
+
+            var input1 = document.createElement("input");
+                input1.setAttribute("type","submit");
+                input1.setAttribute("id",element.folio);
+                input1.setAttribute("name","bntPDFfac");
+                input1.setAttribute("class",'btn btn-print');
+                input1.setAttribute("value","XML");
+                input1.addEventListener("click",()=>{XMLfactura(factura)}, false);
+                
+        
+            cll0.innerHTML = element.folio;
+            cll1.innerHTML = formatDate(element.fecha);
+            cll2.innerHTML = formatNumber(element.importe);
+            cll3.append(input); 
+            cll4.append(input1); 
+    }   
+    });
+}
+
+
+function leer_combustibles(){
+
+    fetch("https://monedero.grupopetromar.com/apirest/index.php/?id=getCombustibles", {
+           method: "GET",
+           mode: "cors",
+       })
+       .then(response => response.json())
+       .catch(error => console.log(error))
+       .then((data) => {
+   
+           data = JSON.stringify(data);
+           sessionStorage.setItem("combustible", data);
+           let combustibles = sessionStorage.getItem("combustible");
+       combustibles  = JSON.parse(combustibles );
+      // console.log(combustibles);
+       let div1 = byID("combustibles-checks22");
+       for(element of combustibles){
+   
+           var input1 = document.createElement("input");
+           input1.setAttribute("type","checkbox");
+           input1.setAttribute("value",element.tipocombustible);
+           input1.setAttribute("name","listadecombustibles2");
+           input1.setAttribute("id",element.tipocombustible);
+           div1.appendChild(input1);
+           var label1 = document.createElement("label");
+           label1.setAttribute("for","");
+           label1.innerHTML=element.nombre;
+           div1.appendChild(label1);    
+           var br1 = document.createElement("br");
+           div1.appendChild(br1);  
+       }
+        })
+   
+   
+   
+       
+   }
+
+
+function productos_checks(){
+    let productos = sessionStorage.getItem("productos");
+    productos = JSON.parse(productos);
+    let div2 = byID("combustibles-checks22");
+   // productos = JSON.stringify(productos);
+    console.log(productos)
+    for(element of productos){
+        var input = document.createElement("input");
+        input.setAttribute("type","checkbox");
+        input.setAttribute("value",element.folio);
+        input.setAttribute("name","checkproducto2");
+        input.setAttribute("id",element.folio);
+        div2.appendChild(input);
+        var label = document.createElement("label");
+        label.setAttribute("for",element.folio);
+        label.innerHTML=element.nombre;
+        div2.appendChild(label);    
+        var br = document.createElement("br");
+        div2.appendChild(br);  
+    }
+}
+

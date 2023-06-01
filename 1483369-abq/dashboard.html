@@ -4457,13 +4457,24 @@
                             
                         </div>
                         <span>
-                            <select name="seleccioncte" class="cform-input sf-cte" id="altatarjetas-idcte05" onchange="Buscarcliente('1')" style="width: 187px;"></select>
+                            <select name="seleccioncte" class="cform-input sf-cte" id="altatarjetas-idcte05" onchange="leer_tarjetaUsuarios(this.value); getPlacas(this.value, 'editar_tarjetas_placas1');" onchange="Buscarcliente('1')" style="width: 187px;"></select>
                         </span>
                         
                             <span><input type="date" class="inputfecha" id="fechaini1"></span>
                             <span><input type="date" class="inputfecha" id="fechafin1"  ></span>
-
-                            <span><button class="btnfiltrar" style="margin-top: 10px;" onclick="filtrarservicios()">Filtrar</button></span>
+                            <span>
+                                <select type="text" class="cform-select sltarjetas2" id="editar_tarjetas_placas1" onchange="getTarjetaFPlaca(this.value, 'altatarjetas-notarjeta1-servicios')" >
+        
+                                    <option value="">SELECCIONE PLACA</option>
+    
+                                </select>    
+                            </span>    
+                            <span><button class="btnfiltrar" style="margin-top: 10px;" onclick="filtrarservicios()">Filtrar</button></span> 
+                            <span>
+                                <select  type="text" class="cform-select2 sltarjetas" id="altatarjetas-notarjeta1-servicios" style="margin-right: 5px;"&nbsp&nbsp&nbsp>
+                            </span>
+                           
+                            
                     </div>
                     
                     
@@ -4524,7 +4535,7 @@
                         Listado de facturación
                     </div>
 
-                    <table id="tbl-clientesfacturas">
+                    <table id="tbl-clientesservicios">
                         <tr>
                             <th>Selección</th>
                             <th>#Folio</th>

@@ -23,6 +23,7 @@ if($method == "OPTIONS") {
 } 
 
 $strtimbrado = $_POST['complemento'];
+$strtimbrado = str_replace("//", "/", $strtimbrado);
 $nombre = $_POST['nombrec'];
 
 $conexion = new Conexion();
@@ -31,31 +32,31 @@ $db = $conexion->getConexion();
 
  
 
-//echo $strtimbrado;
+
 
  
 
 if (file_exists($strtimbrado)){
-
+    
     $xml = simplexml_load_file($strtimbrado);
 
     $crxml=new crXml(); 
     $data = file_get_contents($strtimbrado); 
     $crxml->loadXML($data); 
-
+    
     $pngQR = substr($strtimbrado, 0,-4).".png";
 
         //CADENAS PARA ENTRAR A LOS NODOS (SE OCUPAN LOS NAMESPACE QUE ESTAN EN LOS ATRIBUTOS 'xmlns'  /  [ns = NameSpace])
 
-    $ns_cfdi = 'http://www.sat.gob.mx/cfd/3';
+    $ns_cfdi = 'http://www.sat.gob.mx/cfd/4';
 
-    $ns_ecc12 = 'http://www.sat.gob.mx/Pagos';
+    $ns_ecc12 = 'http://www.sat.gob.mx/Pagos20';
 
     $ns_tfd = 'http://www.sat.gob.mx/TimbreFiscalDigital';
 
     //http://www.sat.gob.mx/sitio_internet/cfd/Pagos10
 
-
+   
 
     $Comprobante = array();
 
@@ -67,14 +68,8 @@ if (file_exists($strtimbrado)){
 
     }
 
-
-
     
-
     
-
-
-
 
 
 
@@ -90,8 +85,9 @@ if (file_exists($strtimbrado)){
     }
 
     $Comprobante['Emisor'] = $Emisor;
+    
 
-
+   
 
 
 
@@ -107,9 +103,8 @@ if (file_exists($strtimbrado)){
 
     $Comprobante['Receptor'] = $Receptor;
 
-
-
-
+    
+    //print_r($Comprobante['Receptor']['Rfc']);
 
         //ARRAY CON VALORES DE {Concepto}
 
@@ -132,20 +127,20 @@ if (file_exists($strtimbrado)){
     $Comprobante['Concepto'] = $Concepto;
 
     
-
-
-
+    
 
 
     
 
     
-
+ 
 
 
         //ARRAY CON VALORES DE {ecc12:Conceptos}
 
     $Conceptos_combustible = array();
+    //print_r($xml->children($ns_cfdi)->Complemento->children($ns_ecc12));
+    //echo $strtimbrado; 
 
     foreach ($xml->children($ns_cfdi)->Complemento->children($ns_ecc12)->Pagos->children($ns_ecc12) as $key => $item){
 
@@ -164,6 +159,7 @@ if (file_exists($strtimbrado)){
          
 
     }
+   
 
 
 
@@ -172,6 +168,9 @@ if (file_exists($strtimbrado)){
     $Complemento['Pagos'] = $Concepto_combustible;
 
     $Comprobante['Complemento'] = $Complemento;
+
+  
+
 
 
 
@@ -205,7 +204,7 @@ if (file_exists($strtimbrado)){
 
             //ARRAY CON VALORES DE {tdf:TimbreDigital}
 
-       
+            
  
             $Comprobantee = 'cfdi:Comprobante';
             $Complemento = 'cfdi:Complemento';
@@ -216,14 +215,14 @@ if (file_exists($strtimbrado)){
   
           $TimbreFiscalDigital = $crxml->$Comprobantee->$Complemento->$timbreFiscalDigital;
 
-          $CadenaCompCertSAT = "||".$TimbreFiscalDigital['Version']."|".$TimbreFiscalDigital['UUID']."|".$TimbreFiscalDigital['FechaTimbrado']."|".
+          $CadenaCompCertSAT = "||".$TimbreFiscalDigital['Version']."|".$TimbreFiscalDigital['UUID']."|".$TimbreFiscalDigital['FechaTimbrado']."|";
           $TimbreFiscalDigital['RfcProvCertif']."|".$TimbreFiscalDigital['SelloCFD']."|".$TimbreFiscalDigital['NoCertificadoSAT']."||" ;
 
          // echo $CadenaCompCertSAT;
   
 
 
-
+         
 
 
 
@@ -259,6 +258,13 @@ if (file_exists($strtimbrado)){
     // print_r($Comprobante);
 
     // echo "</pre>";
+
+        
+
+
+
+
+
 
 }
 
@@ -1053,7 +1059,7 @@ echo'<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2
 <script>
 
     window.onload = function(){ 
-        downloadPDFWithjsPDF("'.$nombre.'","'.$folio_doc.'","'.$fecha_doc.'","'.$importe_doc.'", "Complemento");
+        downloadPDFWithjsPDFComplementos("'.$nombre.'","'.$folio_doc.'","'.$fecha_doc.'","'.$importe_doc.'", "Complemento", "'.$a.'", "'.$b.'", "'.$Comprobante['Receptor']['Rfc'].'");
 
     }
 

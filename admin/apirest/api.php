@@ -304,11 +304,36 @@ class Api{
 		$aplicaciones = array();
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.folio_p ,t1.idcliente,t1.fechacaptura,t1.restanteabono,t2.tipocliente,t1.idfactura,t1.importe as importe_app ,t1.foliopago,t1.abono as abono_app,t1.generado,t1.inactivo, t2.rzonsocial, t2.periododepago, t3.*, t4.referencia, t4.bancodestino, t4.formapago, t4.IDabono, t4.importeabono, t4.importedisponibleabono, t4.fecha FROM pagosaplicaciones t1 inner join clientes t2 on t1.idcliente=t2.idcliente inner join facturas t3 on t1.idfactura=t3.folio inner join abonos t4 on t1.foliopago=t4.IDabono where t1.idcliente ='{$cte}' AND t1.cancelado='0' AND DATE(t1.fechacaptura)>='{$fini}' AND DATE(t1.fechacaptura)<='{$ffin}' ORDER BY fechacaptura ASC";
+		$Query = "SELECT t1.folio_p ,t1.idcliente,t1.fechacaptura,t1.restanteabono,t2.tipocliente,t1.idfactura,t1.importe as importe_app ,
+		t1.foliopago,t1.abono as abono_app,t1.generado,t1.inactivo, t2.rzonsocial, t2.periododepago, t3.*, t4.referencia, t4.bancodestino, 
+		t4.formapago, t4.IDabono, t4.importeabono, t4.importedisponibleabono, t4.fecha 
+		FROM pagosaplicaciones t1 inner join clientes t2 on t1.idcliente=t2.idcliente inner join facturas t3 on t1.idfactura=t3.folio inner join abonos t4 on t1.foliopago=t4.IDabono where t1.idcliente ='{$cte}' AND t1.cancelado='0' AND DATE(t1.fechacaptura)>='{$fini}' AND DATE(t1.fechacaptura)<='{$ffin}' ORDER BY fechacaptura ASC";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		while($filau = $consultad->fetch()){
-			$aplicaciones[] = $filau;
+			//obtener restante
+			$QueryRestante = "SELECT ifnull(sum(abono), 0) as abonado from pagosaplicaciones where folio < '".$filau["folio"]."' and idfactura = '".$filau["idfactura"]."'";
+			$consultat = $db->prepare($QueryRestante);
+			$consultat->execute();
+			while($filad = $consultat->fetch()){
+				$abonado = $filad["abonado"];
+			}
+			//$aplicaciones[] = $filau;
+			$aplicaciones[] = array(
+				"folio_p" => $filau["folio_p"],
+				"fechacaptura" => $filau["fechacaptura"],
+				"formapago" => $filau["formapago"],
+				"rzonsocial" => $filau["rzonsocial"],
+				"folio" => $filau["folio"],
+				"importe" => $filau["importe"],
+				"importe_app" => $filau["importe_app"],
+				"tipocliente" => $filau["tipocliente"],
+				"referencia" => $filau["referencia"],
+				"fecha" => $filau["fecha"],
+				"abono_app" => $filau["abono_app"],
+				"generado" => $filau["generado"],
+				"restanteabono" => ($filau["importe"] - $abonado)
+			);
 		}
 		return $aplicaciones;
 	}
@@ -321,12 +346,17 @@ class Api{
 		$correctos = 0;
 		$suma = 0;
 		$litros = 0;
-		$QTC="SELECT tipocliente FROM clientes where idcliente = '".$idcliente."";
+		$QTC="SELECT tipocliente, domfiscalrec, regfiscalrec, usocfdi FROM clientes where idcliente = '".$idcliente."'";
 		$consultad = $db->prepare($QTC);
 		$consultad->execute();
 		$TIPOC = $consultad->fetch(PDO::FETCH_OBJ);
 		$TIPOC = (array)$TIPOC;
+		 
+		$domfiscalrec = $TIPOC['domfiscalrec'];
+		$regfiscalrec = $TIPOC['regfiscalrec'];
+		$usocfdi = $TIPOC['usocfdi'];
 		$TIPOC = $TIPOC['tipocliente'];
+		//echo $QTC;
 		$QUF="SELECT folio FROM facturas ORDER BY folio DESC limit 1";
 		$consultad = $db->prepare($QUF);
 		$consultad->execute();
@@ -384,7 +414,7 @@ class Api{
 
 
 		//insert facturas 
-		$Query = "INSERT INTO facturas (idcliente, fechafacturacion, importe, restante, cantidad, fechavencimiento, periodoi, periodof) values ('".$idcliente."','".$fecha."','".$suma."','".$suma."','".$litros."', '".$FechaV."', '".$periodoi."', '".$periodof."')";
+		$Query = "INSERT INTO facturas (idcliente, fechafacturacion, importe, restante, cantidad, fechavencimiento, periodoi, periodof, domfiscalrec, regfiscalrec, usocfdi) values ('".$idcliente."','".$fecha."','".$suma."','".$suma."','".$litros."', '".$FechaV."', '".$periodoi."', '".$periodof."', '".$domfiscalrec."', '".$regfiscalrec."', '".$usocfdi."')";
 	 
 		if ($db->query($Query) == TRUE) {
 			//get last id 
@@ -486,10 +516,11 @@ class Api{
 		
 	}
 	
-	public function addCliente($repre,$cabono,$ccargo,$nombre, $rfc, $grupo, $contacto, $telefono, $direccion,  $colonia, $estado, $ciudad, $cp,$tipo,$periodopago, $limitecredito){
+	public function addCliente($repre,$cabono,$ccargo,$nombre, $rfc, $grupo, $contacto, $telefono, $direccion,  $colonia, $estado, $ciudad, $cp,$tipo,$periodopago, $limitecredito, $usocdfi, $domfiscal, $regfiscalrec){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "INSERT INTO clientes ( rzonsocial, nombre, rfc, direccion, contacto, telefono, estado, colonia, cp, ciudad, grupo, tipocliente,cuentaAbono,cuentaCargo,representante) VALUES ('" . $nombre . "', '" . $nombre . "', '" . $rfc . "', '" . $direccion . "', '" . $contacto . "','" . $telefono . "','" . $estado . "','" . $colonia . "','" . $cp . "','" . $ciudad . "','" . $grupo . "','" . $tipo . "','" . $cabono . "','" . $ccargo . "','".$repre."')";
+		$Query = "INSERT INTO clientes ( rzonsocial, nombre, rfc, direccion, contacto, telefono, estado, colonia, cp, ciudad, grupo, tipocliente,cuentaAbono,cuentaCargo,representante, domfiscalrec, regfiscalrec, usocfdi) VALUES ('" . $nombre . "', '" . $nombre . "', '" . $rfc . "', '" . $direccion . "', '" . $contacto . "','" . $telefono . "','" . $estado . "','" . $colonia . "','" . $cp . "','" . $ciudad . "','" . $grupo . "','" . $tipo . "','" . $cabono . "','" . $ccargo . "','".$repre."', '".$domfiscal."', '".$regfiscalrec."', '".$usocdfi."')";
+		//echo $Query;
 		if ($db->query($Query) == TRUE) {
 			
 	
@@ -867,7 +898,7 @@ class Api{
 		$clientes = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
-			$Query = "SELECT t1.*,t2.Tipo , t2.periodoCredito , t2.limiteCredito as limiteC FROM clientes t1 inner join tipopago t2 on t1.idcliente = t2.idcliente";
+			$Query = "SELECT t1.*,t2.Tipo , t2.periodoCredito , t2.limiteCredito as limiteC FROM clientes t1 inner join tipopago t2 on t1.idcliente = t2.idcliente GROUP BY t1.idcliente";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		while($filau = $consultad->fetch()){
@@ -879,19 +910,36 @@ class Api{
 		$clientes = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
-		if($idtarjeta == ""){
-			echo $idtarjeta;
-			$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
-			INNER JOIN tarjetas t2 ON t1.tarjeta = t2.notarjeta
-			INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo 
-			INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
-			where t1.idcliente = '".$idcliente."' and DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0'";
+		if($idtarjeta == ""){ 
+			if($idcliente == "000"){
+				$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+				INNER JOIN tarjetas t2 ON t1.tarjeta = t2.notarjeta
+				INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo 
+				INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
+				where  DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0'";
+			}else{
+				$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+				INNER JOIN tarjetas t2 ON t1.tarjeta = t2.notarjeta
+				INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo 
+				INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
+				where t1.idcliente = '".$idcliente."' and DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0'";
+			}
+			
 		}else{
-			$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+			if($idcliente == "000"){
+				$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
+				inner join tarjetas t2 on t1.tarjeta = t2.notarjeta	 
+				INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo
+				INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
+				where   DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0' and t2.folio = '".$idtarjeta."'";
+			}else{
+				$Query = "SELECT t1.*, t3.placas, t4.nombre as nombreestacion FROM servicios t1 
 			inner join tarjetas t2 on t1.tarjeta = t2.notarjeta	 
 			INNER JOIN vehiculos t3 ON t2.idplaca = t3.idvehiculo
 			INNER JOIN estaciones t4 ON t1.estacion = t4.idestacion
 			where t1.idcliente = '".$idcliente."' and DATE(t1.fecha) >= '".$fechainicial."' and DATE(t1.fecha) <= '".$fechafinal."'  and t1.facturado = '0' and t1.cancelado = '0' and t2.folio = '".$idtarjeta."'";
+			}
+			
 		}
 		
 		$consultad = $db->prepare($Query);  
@@ -1084,7 +1132,11 @@ class Api{
 	public function Cargos($placa){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT  t1.activo, t1.nip, t1.notarjeta, t3.choferactivo, t1.folio, t3.nombre FROM tarjetas t1 inner join vehiculos_choferes t2 on t2.idvehiculo = t1.idplaca inner join choferes t3 on t2.idchofer = t3.idchofer where t1.idplaca ={$placa} limit 1";
+		$Query = "SELECT  IFNULL(MAX(t4.kmnuevo),'') as odometro, t1.activo, t1.nip, t1.notarjeta, t3.choferactivo, t1.folio, t3.nombre 
+		FROM tarjetas t1 inner join vehiculos_choferes t2 on t2.idvehiculo = t1.idplaca 
+		inner join choferes t3 on t2.idchofer = t3.idchofer 
+		left join odometro t4 on t1.idplaca = t4.idvehiculo 
+		where t1.idplaca ={$placa} limit 1";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		while($filau = $consultad->fetch(PDO::FETCH_OBJ)){
@@ -1318,7 +1370,7 @@ class Api{
 		$clientes = array();
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.*, t2.rzonsocial,t3.placas FROM tarjetas t1 inner join clientes t2 on t1.idcliente=t2.idcliente inner join vehiculos t3 on t1.idplaca=t3.idvehiculo WHERE t1.idcliente='{$cte}'";//t1 inner join clientes t2 on t1.idcliente = t2.idcliente";
+		$Query = "SELECT t1.*, t2.rzonsocial,t3.placas, t3.modelo FROM tarjetas t1 inner join clientes t2 on t1.idcliente=t2.idcliente inner join vehiculos t3 on t1.idplaca=t3.idvehiculo WHERE t1.idcliente='{$cte}'";//t1 inner join clientes t2 on t1.idcliente = t2.idcliente";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		while($filau = $consultad->fetch()){

@@ -21,7 +21,7 @@ $complemento = $_POST['complemento'];
     $res[] = $filau;
   }
   $resPagoapp= (array)$res[0];
-  $Query1 = "SELECT rzonsocial, contacto FROM clientes WHERE idcliente='{$cte}'";
+  $Query1 = "SELECT rzonsocial, contacto, rfc FROM clientes WHERE idcliente='{$cte}'";
   $consultad = $db->prepare($Query1);
   $consultad->execute();
   while($filau1 = $consultad->fetch(PDO::FETCH_OBJ)){
@@ -34,6 +34,7 @@ $complemento = $_POST['complemento'];
   $abono = $resPagoapp['abono'];
   $fecha = $resPagoapp['fechacaptura'];
   $idfactura = $resPagoapp['idfactura'];
+  $rfc = $servicio1['rfc'];
   /*$fecha = substr($fecha, -19,10);
   //$estacion = $servicio['estacion'];
 
@@ -60,7 +61,7 @@ $complemento = $_POST['complemento'];
 
 
 		 
-		  $enviado = sendMail($nombre,$correo,$importe,$fecha,$abono,$complemento,$idfactura);
+		  $enviado = sendMail($nombre,$correo,$importe,$fecha,$abono,$complemento,$idfactura, $rfc);
 			if($enviado){
 				echo "Enviado";
 			}else{
@@ -76,7 +77,7 @@ $complemento = $_POST['complemento'];
     }
 
 
-function sendMail($nombre,$correo,$importe,$fecha,$abono,$complemento,$idfactura){
+function sendMail($nombre,$correo,$importe,$fecha,$abono,$complemento,$idfactura, $rfc){
     try{
         $mail = new PHPMailer(true);
         $mail->isMail();
@@ -92,8 +93,8 @@ function sendMail($nombre,$correo,$importe,$fecha,$abono,$complemento,$idfactura
         $mail->addAddress($correo, $nombre);
 
         //Attachments  
-        $mail->addAttachment('../../../DocsClientes/CPE190207226/'.$complemento.'.xml');
-        $mail->addAttachment('../../../DocsClientes/CPE190207226/'.$complemento.'.pdf');
+        $mail->addAttachment('../../../DocsClientes/'.$rfc.'/'.$complemento.'.xml');
+        $mail->addAttachment('../../../DocsClientes/'.$rfc.'/'.$complemento.'.pdf');
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');
 
         //Content

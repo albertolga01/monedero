@@ -378,9 +378,15 @@ class Api{
 	}
 
 	public function getFacturas($cte){
+		
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.timbrado, t1.folio, t1.fechagenerado, t1.importe, t1.restante, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = {$cte} order by t1.fechagenerado desc LIMIT 25  and t1.timbrado = '1'";
+		$Query = "SELECT t1.timbrado, t1.folio, t1.fechagenerado, t1.importe, t1.restante, t1.factura, t1.cantidad, t2.rfc, t2.periododepago 
+		from facturas t1 
+		inner join clientes t2 on t1.idcliente = t2.idcliente 
+		where t1.idcliente = {$cte} 
+		and t1.timbrado = '1'
+		order by t1.fechagenerado desc LIMIT 25  ";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		$i = 0;
@@ -410,7 +416,11 @@ class Api{
 	public function getComplementos($cte){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.abono,t1.fechacaptura,t1.folio_p,t2.rfc from pagosaplicaciones t1 inner join clientes t2 on t1.idcliente=t2.idcliente where t1.idcliente = {$cte} order by t1.fechacaptura desc LIMIT 25";
+		$Query = "SELECT t3.nombrecomplemento as complemento, t1.abono,t1.fechacaptura,t1.folio_p,t2.rfc 
+		from pagosaplicaciones t1 
+		inner join clientes t2 on t1.idcliente=t2.idcliente 
+		LEFT join reg_complementos t3 on t1.folio_p=t3.foliopagoaplicacion 
+		where t1.idcliente = {$cte} order by t1.fechacaptura desc LIMIT 25";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		$i = 0;
@@ -420,7 +430,8 @@ class Api{
 			"folio"=> $filau['folio_p'], 
 			"fecha"=> $filau['fechacaptura'], 
 			"importe"=> $filau['abono'],
-			"rfc"=> $filau['rfc']
+			"rfc"=> $filau['rfc'],
+			"complemento"=> $filau['complemento']
 		);
 		$i++;
 		}
@@ -456,7 +467,7 @@ class Api{
 		$clientes = array();
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.fecha, t1.tarjeta, t2.notarjeta,t2.folio, t3.placas, t3.noeconomico, t1.importe, t1.estacion, t5.nombre, t1.litros, t7.nombre as nombrep, t6.kmanterior, t6.kmnuevo from jkmpg7ol_monedero.servicios t1 inner join jkmpg7ol_monedero.productos t7 on t1.producto = t7.folio inner join jkmpg7ol_monedero.tarjetas t2 on t1.tarjeta = t2.notarjeta inner join jkmpg7ol_monedero.vehiculos t3 on t2.folio = t3.idtarjeta inner join jkmpg7ol_monedero.vehiculos_choferes t4 on t3.idvehiculo = t4.idvehiculo inner join jkmpg7ol_monedero.choferes t5 on t5.idchofer = t4.idchofer inner join jkmpg7ol_monedero.odometro t6 on t6.idservicio = t1.folio  where t3.controlaodometro = 1 and t1.idcliente = {$cte} order by fecha desc LIMIT 40";
+		$Query = "SELECT t7.nombre as producto, t1.fecha, t1.tarjeta, t2.notarjeta,t2.folio, t3.placas, t3.noeconomico, t1.importe, t1.estacion, t5.nombre, t1.litros, t7.nombre as nombrep, t6.kmanterior, t6.kmnuevo from jkmpg7ol_monedero.servicios t1 inner join jkmpg7ol_monedero.productos t7 on t1.producto = t7.folio inner join jkmpg7ol_monedero.tarjetas t2 on t1.tarjeta = t2.notarjeta inner join jkmpg7ol_monedero.vehiculos t3 on t2.folio = t3.idtarjeta inner join jkmpg7ol_monedero.vehiculos_choferes t4 on t3.idvehiculo = t4.idvehiculo inner join jkmpg7ol_monedero.choferes t5 on t5.idchofer = t4.idchofer inner join jkmpg7ol_monedero.odometro t6 on t6.idservicio = t1.folio  where t3.controlaodometro = 1 and t1.idcliente = {$cte} order by fecha desc LIMIT 40";
 		//echo $Query;
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
@@ -469,7 +480,16 @@ class Api{
 		$clientes = array();
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.fecha, t1.tarjeta, t2.notarjeta,t2.folio, t3.placas, t3.noeconomico, t1.importe, t1.estacion, t5.nombre, t1.litros, t7.nombre as nombrep, t6.kmanterior, t6.kmnuevo from jkmpg7ol_monedero.servicios t1 inner join jkmpg7ol_monedero.productos t7 on t1.producto = t7.folio inner join jkmpg7ol_monedero.tarjetas t2 on t1.tarjeta = t2.notarjeta inner join jkmpg7ol_monedero.vehiculos t3 on t2.folio = t3.idtarjeta inner join jkmpg7ol_monedero.vehiculos_choferes t4 on t3.idvehiculo = t4.idvehiculo inner join jkmpg7ol_monedero.choferes t5 on t5.idchofer = t4.idchofer inner join jkmpg7ol_monedero.odometro t6 on t6.idservicio = t1.folio where t3.controlaodometro = 1 and t1.idcliente = '".$cte."' and DATE(t1.fecha) >= '".$fechai."' and DATE(t1.fecha) <= '".$fechaf."' and t2.folio = '".$tarjeta."'";
+		$Query = "SELECT t7.nombre as producto, t1.fecha, t1.tarjeta, t2.notarjeta,t2.folio, t3.placas, t3.noeconomico, 
+		t1.importe, t1.estacion, t5.nombre, t1.litros, t7.nombre as nombrep, t6.kmanterior, t6.kmnuevo 
+		from jkmpg7ol_monedero.servicios t1 
+		inner join jkmpg7ol_monedero.productos t7 on t1.producto = t7.folio 
+		inner join jkmpg7ol_monedero.tarjetas t2 on t1.tarjeta = t2.notarjeta 
+		inner join jkmpg7ol_monedero.vehiculos t3 on t2.folio = t3.idtarjeta 
+		inner join jkmpg7ol_monedero.vehiculos_choferes t4 on t3.idvehiculo = t4.idvehiculo 
+		inner join jkmpg7ol_monedero.choferes t5 on t5.idchofer = t4.idchofer 
+		inner join jkmpg7ol_monedero.odometro t6 on t6.idservicio = t1.folio 
+		where t3.controlaodometro = 1 and t1.idcliente = '".$cte."' and DATE(t1.fecha) >= '".$fechai."' and DATE(t1.fecha) <= '".$fechaf."' and t2.folio = '".$tarjeta."'";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		//echo $Query;
@@ -622,17 +642,26 @@ class Api{
 	}
 
 	public function UpDateTarjeta($tarjeta, $estado, $estacion, $combustible, $horariodia1, $horariodia2, $horariodia3,
-		$horariodia4, $horariodia5, $horariodia6, $horariodia7, $horario1, $horario2, $limiteC,  $limiteP){
+		$horariodia4, $horariodia5, $horariodia6, $horariodia7, $horario1, $horario2, $limiteC,  $limiteP, $tipoLimite){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
 		$e=0;
 		$c=0;
 		$contador=0;
 		$a=0;
-		$Query = "UPDATE tarjetas SET horarioinicial = '{$horario1}', horariofinal = '{$horario2}', 
-		lunes = '{$horariodia1}', martes = '{$horariodia2}', miercoles = '{$horariodia3}', jueves = '{$horariodia4}', viernes = '{$horariodia5}',
-		sabado = '{$horariodia6}', domingo = '{$horariodia7}', limitelitros = '{$limiteC}', tipoperiodo = '{$limiteP}'
-			WHERE folio='{$tarjeta}'";
+		if($tipoLimite  == "1"){
+			$Query = "UPDATE tarjetas SET horarioinicial = '{$horario1}', horariofinal = '{$horario2}', 
+			lunes = '{$horariodia1}', martes = '{$horariodia2}', miercoles = '{$horariodia3}', jueves = '{$horariodia4}', viernes = '{$horariodia5}',
+			sabado = '{$horariodia6}', domingo = '{$horariodia7}', limitelitros = '{$limiteC}', tipoperiodo = '{$limiteP}', tipoLimite = '{$tipoLimite}'
+				WHERE folio='{$tarjeta}'";
+		}else if($tipoLimite == "2"){
+			$Query = "UPDATE tarjetas SET horarioinicial = '{$horario1}', horariofinal = '{$horario2}', 
+			lunes = '{$horariodia1}', martes = '{$horariodia2}', miercoles = '{$horariodia3}', jueves = '{$horariodia4}', viernes = '{$horariodia5}',
+			sabado = '{$horariodia6}', domingo = '{$horariodia7}', limitedinero = '{$limiteC}', tipoperiodo = '{$limiteP}', tipoLimite = '{$tipoLimite}'
+				WHERE folio='{$tarjeta}'";
+		}
+		//echo $Query; 
+		
 		if ($db->query($Query)==TRUE){$contador=$contador+1;}else{$contador=$contador+0;}
 		$Query1 = "DELETE FROM tarjeta_estacion WHERE folio_tarjeta = '".$tarjeta."';";
 		if ($db->query($Query1)==TRUE){$contador=$contador+1;}else{$contador=$contador+0;}
@@ -689,7 +718,13 @@ class Api{
 	public function ComplementosCte($idcliente, $fechainicial, $fechafinal){
 		$conexion = new Conexion();
 		$db = $conexion->getConexion();
-		$Query = "SELECT t1.abono,t1.fechacaptura,t1.folio_p,t2.rfc from pagosaplicaciones t1 inner join clientes t2 on t1.idcliente=t2.idcliente where t1.idcliente = {$idcliente} and date(t1.fechacaptura) >= '".$fechainicial."' and date(t1.fechacaptura) <= '".$fechafinal."' order by t1.fechacaptura desc";
+		$Query = "SELECT t3.nombrecomplemento AS complemento, t1.abono,t1.fechacaptura,t1.folio_p,t2.rfc 
+		from pagosaplicaciones t1 
+		inner join clientes t2 on t1.idcliente=t2.idcliente 
+		left join reg_complementos t3 ON t1.folio_p=t3.foliopagoaplicacion 
+		where t1.idcliente = {$idcliente} 
+		and date(t1.fechacaptura) >= '".$fechainicial."' 
+		and date(t1.fechacaptura) <= '".$fechafinal."' order by t1.fechacaptura desc";
 		$consultad = $db->prepare($Query);
 		$consultad->execute();
 		$i = 0;
@@ -699,7 +734,8 @@ class Api{
 			"folio"=> $filau['folio_p'], 
 			"fecha"=> $filau['fechacaptura'], 
 			"importe"=> $filau['abono'],
-			"rfc"=> $filau['rfc']
+			"rfc"=> $filau['rfc'],
+			"complemento"=> $filau['complemento']
 		);
 		$i++;
 		}
@@ -712,7 +748,7 @@ class Api{
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
 		$Query = "SELECT t1.timbrado, t1.folio, t1.fechagenerado, t1.importe, t1.factura, t1.cantidad, t2.rfc, t2.periododepago from facturas t1 inner join clientes t2 on t1.idcliente = t2.idcliente where t1.idcliente = '".$idcliente."' and date(t1.fechagenerado) >= '".$fechainicial."' and date(t1.fechagenerado) <= '".$fechafinal."' and t1.timbrado = '1' ";
-		 
+		 //echo $Query;
 		$consultad = $db->prepare($Query);  
 		$consultad->execute();
 		$i = 0;
@@ -842,13 +878,13 @@ class Api{
 
 	
 	public function tarjetasCTE($idcliente){
-	 
+		//AND activo = '1' tarjetas  
 		$servicios = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion();
 		$date = date('Y-m-d');
 		$Query = "SELECT t1.rzonsocial, t1.tipocliente, t1.limitecredito,
-		(SELECT  COUNT(folio) FROM tarjetas WHERE idcliente = '".$idcliente."'  AND activo = '1') AS tarjetas, 
+		(SELECT  COUNT(folio) FROM tarjetas WHERE idcliente = '".$idcliente."'  ) AS tarjetas, 
 		(SELECT  COUNT(importe) FROM servicios WHERE idcliente = '".$idcliente."' and date(fecha) = '".$date."') AS servicios ,
 		(SELECT  SUM(importe) FROM servicios WHERE idcliente = '".$idcliente."' and date(fecha) = '".$date."') AS importedia ,
 		(SELECT  sum(importedisponibleabono) FROM abonos WHERE idclienteabono = '".$idcliente."' and importedisponibleabono > 0 ) AS saldocontado ,
@@ -926,7 +962,7 @@ class Api{
 		$servicios = array();
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion(); 
-		$Query = "SELECT * from tarjetas where idcliente = '".$idcliente."' ";
+		$Query = "SELECT t1.*, t2.placas as placas from tarjetas t1 INNER JOIN vehiculos t2 ON t1.folio = t2.idtarjeta  where t1.idcliente = '".$idcliente."' ";
 		$consultad = $db->prepare($Query);  
 		$consultad->execute(); 
 		$i = 0;
@@ -1028,12 +1064,30 @@ class Api{
 		$conexion = new Conexion(); 
 		$db = $conexion->getConexion(); 
 		$Query = "SELECT * from productos where activo = '1'";
-		$Query;
+		//echo $Query;
 		$consultad = $db->prepare($Query);  
 		$consultad->execute(); 
 		$i = 0;
 		while($filau = $consultad->fetch()){
 			$serivicios["productos"][$i] = $filau; 
+			$i ++;
+		}
+		return $serivicios;
+		 
+	}
+
+	public function getProductos1(){
+	 
+		$serivicios = array();
+		$conexion = new Conexion(); 
+		$db = $conexion->getConexion(); 
+		$Query = "SELECT * from productos where activo = '1'";
+		//echo $Query;
+		$consultad = $db->prepare($Query);  
+		$consultad->execute(); 
+		$i = 0;
+		while($filau = $consultad->fetch()){
+			$serivicios[$i] = $filau; 
 			$i ++;
 		}
 		return $serivicios;

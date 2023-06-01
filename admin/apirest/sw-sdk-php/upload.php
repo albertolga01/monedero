@@ -16,11 +16,13 @@ $importe = $_POST['importe'];
 $tipocomprobante = $_POST['tipocomprobante']; 
 $contacto = $_POST['contacto']; 
 $nombreC = $_POST['nombreC']; 
+$cteRFC = $_POST['cteRFC']; 
 
 
 if(isset($_FILES["pdf"]["tmp_name"])){
-	
-	 $ruta = "../../../DocsClientes/CPE190207226/".$nombre.".pdf";
+	 
+   //
+	 $ruta = "../../../DocsClientes/".$cteRFC."/".$nombre.".pdf";
 	 
 	 if(move_uploaded_file($_FILES["pdf"]["tmp_name"],  $ruta)){
 		 //
@@ -55,8 +57,8 @@ function sendMail($nombre,$folio,$fecha,$importe,$tipocomprobante,$contacto,$nom
         $mail->addAddress($contacto, $nombreC);
 
         //Attachments  
-        $mail->addAttachment('../../../DocsClientes/CPE190207226/'.$nombre.'.xml');
-        $mail->addAttachment('../../../DocsClientes/CPE190207226/'.$nombre.'.pdf');
+        $mail->addAttachment('../../../DocsClientes/'.$cteRFC.'/'.$nombre.'.xml');
+        $mail->addAttachment('../../../DocsClientes/'.$cteRFC.'/'.$nombre.'.pdf');
         // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');
 
         //Content

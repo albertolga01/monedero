@@ -36,8 +36,12 @@ class Api{
 
 		//getidcte
 
-		$Q = "SELECT t1.saldoProxima, t1.folio, t1.idchofer, t1.bomba, DATE_FORMAT(t1.fecha, '%m/%d/%Y %h:%i:%s %p') as fecha, t3.nombre as nombreproducto, t1.litros, 
-		t1.preciounitario, t1.importe, t2.nombre as nombrecliente, t1.tarjeta  from servicios t1 inner join clientes t2 on t1.idcliente = t2.idcliente inner join productos t3 on t1.producto = t3.tipocombustible where t1.folio = '".$folio."' ";
+		$Q = "SELECT t4.claveestacion, t1.saldoProxima, t1.folio, t1.idchofer, t1.bomba, DATE_FORMAT(t1.fecha, '%m/%d/%Y %h:%i:%s %p') as fecha, t3.nombre as nombreproducto, t1.litros, 
+		t1.preciounitario, t1.importe, t2.nombre as nombrecliente, t1.tarjeta  from servicios t1 
+		inner join clientes t2 on t1.idcliente = t2.idcliente 
+		inner join productos t3 on t1.producto = t3.tipocombustible 
+		inner join estaciones t4 on t1.estacion = t4.idestacion
+		where t1.folio = '".$folio."' ";
 
 		$consulta = $db->prepare($Q);
 
@@ -63,7 +67,8 @@ class Api{
 				"tarjeta" => $fila['tarjeta'],
 				"bomba" => $fila['bomba'],
 				"saldoProxima" => $fila['saldoProxima'],
-				"importeletra" => $TotalLetra
+				"importeletra" => $TotalLetra,
+				"claveestacion" => $fila['claveestacion']
 			);
 			//$clientes["datosservicio"][0] = $fila;
 
@@ -310,6 +315,23 @@ class Api{
 				$i++;
 			}
 
+//producto de la estacion
+			$productosesta = "SELECT t1.folioproduto, t3.nombre FROM estaciones_productos t1 
+			INNER JOIN estaciones t2 ON t1.idestacion = t2.idestacion 
+			INNER JOIN productos t3 ON t1.folioproduto = t3.folio 
+			where t2.claveestacion = '".$claveestacion."'";
+
+ 
+			$consultad = $db->prepare($productosesta);
+
+			$consultad->execute();
+			$i = 0; 
+			while($filap = $consultad->fetch()){
+
+				$clientes["productosestacion"][$i] = $filap;
+				$i++;
+			}
+
 
 
 			////////////////////////////Facturas Vencidas//////////////////////////
@@ -504,7 +526,7 @@ class Api{
 					//echo $ultimoServ;
 
 
-				
+				//contado tipocliente
 				if($tipocliente['tipocliente']=="0"){
 					//echo "entró";
 					$QueryACTlimite = "SELECT IDabono, importedisponibleabono FROM abonos WHERE iDclienteAbono='".$cliente."' AND importedisponibleabono >'0' order by fecha asc";

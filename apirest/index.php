@@ -70,6 +70,21 @@ if($method == "GET"){
         $json = json_encode($vector);
         echo $json;
     }
+    if($_GET["id"] == "getProductos"){
+        $vector = array();
+        $api = new Api();
+        $vector = $api->getProductos();
+        $json = json_encode($vector);
+        echo $json;
+    }
+
+    if($_GET["id"] == "getProductos1"){
+        $vector = array();
+        $api = new Api();
+        $vector = $api->getProductos1();
+        $json = json_encode($vector);
+        echo $json;
+    }
 
 
     if($_GET["id"] == "getUsuarios"){
@@ -463,6 +478,7 @@ if($method == "POST"){
         $estado = $_POST["estado"];
         $estacion = $_POST["estacion"];
         $combustible = $_POST["combustible"];
+        $horariodia1 = $_POST["horariodia1"];
         $horariodia2 = $_POST["horariodia2"];
         $horariodia3 = $_POST["horariodia3"];
         $horariodia4 = $_POST["horariodia4"];
@@ -474,9 +490,10 @@ if($method == "POST"){
         $limiteC = $_POST["limiteC"];
         //$limiteD = $_POST["limiteD"];
         $limiteP = $_POST["limiteP"];
+        $tipoLimite = $_POST["tipoLimite"];
         $api = new Api();
         $json = $api->UpDateTarjeta($tarjeta, $estado, $estacion, $combustible, $horariodia1, $horariodia2, $horariodia3,
-        $horariodia4, $horariodia5, $horariodia6, $horariodia7, $horario1, $horario2, $limiteC, $limiteP);
+        $horariodia4, $horariodia5, $horariodia6, $horariodia7, $horario1, $horario2, $limiteC, $limiteP, $tipoLimite);
     
         echo $json;
         
@@ -501,14 +518,14 @@ if($method == "POST"){
             $api = new Api();
             $json = $api->ComplementosCte($idcliente, $fechainicial, $fechafinal);
             echo json_encode($json);
-        }
+        } 
 
         if($_POST["id"] == "obtenerServicios"){
             $json = null;
             $idcliente = $_POST["idcliente"]; 
             $fechainicial = $_POST["fechainicial"]; 
             $fechafinal = $_POST["fechafinal"];
-            $api = new Api();
+            $api = new Api(); 
             $json = $api->serviciosCte($idcliente, $fechainicial, $fechafinal);
             echo json_encode($json);
         }

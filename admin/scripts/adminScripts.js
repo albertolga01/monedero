@@ -1398,6 +1398,10 @@ function contraC(a){
 
         toSend.append('Rl', Rl);
 
+        toSend.append('usocdfi', byID("altacte-usocdfi").value);
+        toSend.append('domfiscal', byID("altacte-domfiscal").value);
+        toSend.append('regfiscalrec', byID("altacte-regfiscalrec").value);
+
 
 
 
@@ -4362,7 +4366,7 @@ function leer_Tarjetas(a){
 
                         e.push(ele.nombre+" ")
 
-                       // console.log(ele.nombre)
+                       //console.log(ele.nombre)
 
                     }
 
@@ -4454,7 +4458,7 @@ function leer_Tarjetas(a){
 
             var cll0 = rw.insertCell();
 
-            //var cll1 = rw.insertCell();
+            var cll1 = rw.insertCell();
 
             var cll3 = rw.insertCell();
 
@@ -4496,7 +4500,7 @@ function leer_Tarjetas(a){
 
             cll0.innerHTML = element.notarjeta;
 
-            //cll1.innerHTML = element.activo;
+            cll1.innerHTML = element.modelo;
 
             cll8.innerHTML = element.placas;
 
@@ -6868,7 +6872,7 @@ function filtrarservicios(){
 
             cll4.innerHTML = dosdecimales(element.litros);
 
-            cll5.innerHTML = formatCant("$"+element.importe);
+            cll5.innerHTML = formatCant("$"+Number(element.importe).toFixed(2));
 
             cll7.append(button);
 
@@ -8680,11 +8684,8 @@ function CargoCliente(){
 
                         console.log(data)
 
-                        byID("pago_tarjeta").value = data[0].notarjeta;
-
-                        //byID("pago_nip").value = data[0].nip;
-
-                        //byID("pago_chofer").value = data[0].nombre;
+                        byID("pago_tarjeta").value = data[0].notarjeta; 
+                        byID("pago_KM").value = data[0].odometro; 
 
                         data=JSON.stringify(data);
 
@@ -8738,9 +8739,9 @@ function addservicio(){
 
     }*/
 
-    
-
-    if(producto==""||estacion=="" || importe==""||chofer==""){
+      
+    //console.log(tarjeta);
+    if(producto==""||estacion=="" || importe==""||chofer==""||tarjeta==""||tarjeta=="null"||tarjeta==null){
 
         return mensajeError("Complete todos los campos");
 
@@ -10910,9 +10911,13 @@ function CancelarAct(i){
 
            fileName:filename
 
-       });
+       })
 
-    });
+    }).then(function(){
+  
+     //   alert("terminado");
+
+ });
 
 }
 
